@@ -1,4 +1,4 @@
-package com.lseraponte.cupidapi.hh.hotel;
+package com.lseraponte.cupidapi.hh.hotel.dto;
 
 
 import java.util.List;
@@ -17,7 +17,7 @@ public record HotelDTO(
         String phone,
         String fax,
         String email,
-        Address address,
+        AddressDTO address,
         int stars,
         String airportCode,
         double rating,
@@ -32,8 +32,8 @@ public record HotelDTO(
         String description,
         String markdownDescription,
         String importantInfo,
-        List<Photo> photos,
-        List<Facility> facilities,
-        List<Policy> policies,
-        List<Room> rooms
+        List<PhotoDTO> photos,
+        List<FacilityDTO> facilities,
+        List<PolicyDTO> policies,
+        List<RoomDTO> rooms
 ) { }

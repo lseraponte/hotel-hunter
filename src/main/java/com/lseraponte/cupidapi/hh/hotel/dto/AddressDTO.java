@@ -1,6 +1,6 @@
-package com.lseraponte.cupidapi.hh.hotel;
+package com.lseraponte.cupidapi.hh.hotel.dto;
 
-public record Address(
+public record AddressDTO(
         String address,
         String city,
         String country

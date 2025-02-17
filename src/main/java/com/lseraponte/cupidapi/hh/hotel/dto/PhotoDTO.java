@@ -1,6 +1,6 @@
-package com.lseraponte.cupidapi.hh.hotel;
+package com.lseraponte.cupidapi.hh.hotel.dto;
 
-public record Photo(
+public record PhotoDTO(
         String url,
         String hdUrl,
         String imageDescription,

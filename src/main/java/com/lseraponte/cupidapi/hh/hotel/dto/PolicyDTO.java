@@ -1,6 +1,6 @@
-package com.lseraponte.cupidapi.hh.hotel;
+package com.lseraponte.cupidapi.hh.hotel.dto;
 
-public record Policy(
+public record PolicyDTO(
         String policyType,
         String name,
         String description,
