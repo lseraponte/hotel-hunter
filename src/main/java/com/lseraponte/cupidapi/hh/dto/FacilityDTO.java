@@ -1,4 +1,4 @@
-package com.lseraponte.cupidapi.hh.hotel.dto;
+package com.lseraponte.cupidapi.hh.dto;
 
 public record FacilityDTO(
         int facilityId,

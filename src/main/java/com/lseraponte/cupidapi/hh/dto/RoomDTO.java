@@ -1,4 +1,4 @@
-package com.lseraponte.cupidapi.hh.hotel.dto;
+package com.lseraponte.cupidapi.hh.dto;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ public record RoomDTO(
         int maxAdults,
         int maxChildren,
         int maxOccupancy,
-        List<BedType> bedTypes,
-        List<Amenity> roomAmenities,
+        List<BedTypeDTO> bedTypes,
+        List<AmenityDTO> roomAmenities,
         List<PhotoDTO> photos
 ) {
-    public record BedType(int quantity, String bedType, String bedSize) {}
+    public record BedTypeDTO(int quantity, String bedType, String bedSize) {}
 
-    public record Amenity(int amenitiesId, String name, int sort) {}
+    public record AmenityDTO(int amenitiesId, String name, int sort) {}
 }

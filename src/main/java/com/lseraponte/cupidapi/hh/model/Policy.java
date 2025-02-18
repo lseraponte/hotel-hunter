@@ -1,5 +1,6 @@
-package com.lseraponte.cupidapi.hh.hotel.model;
+package com.lseraponte.cupidapi.hh.model;
 
+import com.lseraponte.cupidapi.hh.dto.PolicyDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,9 +9,19 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "policies")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Policy {
 
     @Id
@@ -40,5 +51,16 @@ public class Policy {
     @Column(name = "parking")
     private String parking;
 
-    // Getters and Setters
+    // Convert from DTO to Entity
+    public static Policy fromDTO(PolicyDTO dto, Hotel hotel) {
+        return Policy.builder()
+                .policyType(dto.policyType())
+                .name(dto.name())
+                .description(dto.description())
+                .childAllowed(dto.childAllowed())
+                .petsAllowed(dto.petsAllowed())
+                .parking(dto.parking())
+                .hotel(hotel)
+                .build();
+    }
 }
