@@ -40,14 +40,8 @@ public class Hotel {
     @Column(name = "main_image_th")
     private String mainImageTh;
 
-    @Column(name = "hotel_type")
-    private String hotelType;
-
     @Column(name = "hotel_type_id")
     private int hotelTypeId;
-
-    @Column(name = "chain")
-    private String chain;
 
     @Column(name = "chain_id")
     private int chainId;
@@ -57,9 +51,6 @@ public class Hotel {
 
     @Column(name = "longitude")
     private double longitude;
-
-    @Column(name = "hotel_name")
-    private String hotelName;
 
     @Column(name = "phone")
     private String phone;
@@ -106,15 +97,6 @@ public class Hotel {
     @Column(name = "pets_allowed")
     private boolean petsAllowed;
 
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "markdown_description")
-    private String markdownDescription;
-
-    @Column(name = "important_info")
-    private String importantInfo;
-
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Photo> photos;
 
@@ -130,19 +112,19 @@ public class Hotel {
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HotelTranslation> translations;
+
     // Method to convert from DTO to Entity
     public static Hotel fromDTO(HotelDTO dto) {
         Hotel hotel = Hotel.builder()
                 .hotelId(dto.hotelId())
                 .cupidId(dto.cupidId())
                 .mainImageTh(dto.mainImageTh())
-                .hotelType(dto.hotelType())
                 .hotelTypeId(dto.hotelTypeId())
-                .chain(dto.chain())
                 .chainId(dto.chainId())
                 .latitude(dto.latitude())
                 .longitude(dto.longitude())
-                .hotelName(dto.hotelName())
                 .phone(dto.phone())
                 .fax(dto.fax())
                 .email(dto.email())
@@ -158,9 +140,14 @@ public class Hotel {
                 .groupRoomMin(dto.groupRoomMin())
                 .childAllowed(dto.childAllowed())
                 .petsAllowed(dto.petsAllowed())
-                .description(dto.description())
-                .markdownDescription(dto.markdownDescription())
-                .importantInfo(dto.importantInfo())
+                .translations(List.of(HotelTranslation.builder()
+                                .hotelType(dto.hotelType())
+                                .chain(dto.chain())
+                                .hotelName(dto.hotelName())
+                                .description(dto.description())
+                                .importantInfo(dto.importantInfo())
+                                .markdownDescription(dto.markdownDescription())
+                        .build()))
                 .build();
 
         hotel.setPhotos(dto.photos().stream().map(photoDTO -> Photo.fromDTO(photoDTO, hotel)).collect(Collectors.toList()));

@@ -1,15 +1,25 @@
 package com.lseraponte.cupidapi.hh.model;
 
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Embeddable
+import java.util.List;
+
+@Entity
+@Table(name = "amenities")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,21 +27,26 @@ import lombok.Setter;
 @Builder
 public class Amenity {
 
-    @Column(name = "amenities_id")
-    private int amenitiesId;
+    @Id
+    @Column(name = "amenity_id")
+    private int amenityId;
 
-    @Column(name = "name")
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = true)
+    private Room room;
 
     @Column(name = "sort")
     private int sort;
 
+    @OneToMany(mappedBy = "amenity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AmenityTranslation> translations;
+
     // Convert from DTO to Entity
     public static Amenity fromDTO(RoomDTO.AmenityDTO dto) {
         return Amenity.builder()
-                .amenitiesId(dto.amenitiesId())
-                .name(dto.name())
+                .amenityId(dto.amenitiesId())
                 .sort(dto.sort())
+                .translations(List.of(AmenityTranslation.builder().name(dto.name()).build()))
                 .build();
     }
 }

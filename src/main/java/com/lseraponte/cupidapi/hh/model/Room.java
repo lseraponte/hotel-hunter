@@ -62,12 +62,10 @@ public class Room {
     @Column(name = "max_occupancy")
     private int maxOccupancy;
 
-    @ElementCollection
-    @CollectionTable(name = "room_bed_types", joinColumns = @JoinColumn(name = "room_id"))
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BedType> bedTypes;
 
-    @ElementCollection
-    @CollectionTable(name = "room_amenities", joinColumns = @JoinColumn(name = "room_id"))
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Amenity> roomAmenities;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
