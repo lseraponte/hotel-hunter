@@ -6,7 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +32,10 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "hotel_id", nullable = false)
+    private Hotel hotel;
 
     @Column(name = "average_score")
     private int averageScore;
@@ -61,8 +67,9 @@ public class Review {
     private String cons;
 
     // Utility Method to Convert DTO to Entity
-    public static Review fromDTO(ReviewDTO dto) {
+    public static Review fromDTO(ReviewDTO dto, Hotel hotel) {
         return Review.builder()
+                .hotel(hotel)
                 .averageScore(dto.averageScore())
                 .country(dto.country())
                 .type(dto.type())

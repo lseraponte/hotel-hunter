@@ -127,6 +127,9 @@ public class Hotel {
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Room> rooms;
 
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Review> reviews;
+
     // Method to convert from DTO to Entity
     public static Hotel fromDTO(HotelDTO dto) {
         Hotel hotel = Hotel.builder()
@@ -164,6 +167,7 @@ public class Hotel {
         hotel.setFacilities(dto.facilities().stream().map(facilityDTO -> Facility.fromDTO(facilityDTO, hotel)).collect(Collectors.toList()));
         hotel.setPolicies(dto.policies().stream().map(policyDTO -> Policy.fromDTO(policyDTO, hotel)).collect(Collectors.toList()));
         hotel.setRooms(dto.rooms().stream().map(roomDTO -> Room.fromDTO(roomDTO, hotel)).collect(Collectors.toList()));
+        hotel.setReviews(dto.reviews().stream().map(reviewDTO -> Review.fromDTO(reviewDTO, hotel)).collect(Collectors.toList()));
 
         return hotel;
     }

@@ -35,5 +35,6 @@ public record HotelDTO(
         List<PhotoDTO> photos,
         List<FacilityDTO> facilities,
         List<PolicyDTO> policies,
-        List<RoomDTO> rooms
+        List<RoomDTO> rooms,
+        List<ReviewDTO> reviews
 ) { }
