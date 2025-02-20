@@ -1,6 +1,5 @@
 package com.lseraponte.cupidapi.hh.model;
 
-import com.lseraponte.cupidapi.hh.dto.PhotoDTO;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,7 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import lombok.ToString;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +30,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"hotel"})
 public class Room {
 
     @Id
