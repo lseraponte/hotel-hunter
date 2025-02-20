@@ -41,10 +41,20 @@ public class Facility {
     private List<FacilityTranslation> translations;
 
     // Convert from DTO to Entity
-    public static Facility fromDTO(FacilityDTO dto, Hotel hotel) {
-        return Facility.builder()
-                .translations(List.of(FacilityTranslation.builder().facilityName(dto.name()).build()))
+    public static Facility fromDTO(FacilityDTO dto, Hotel hotel, String language) {
+
+        Facility facility = Facility.builder()
                 .hotel(hotel)
                 .build();
+
+        FacilityTranslation translation = FacilityTranslation.builder()
+                .facility(facility)
+                .facilityName(dto.name())
+                .language(language)
+                .build();
+
+        facility.setTranslations(List.of(translation));
+
+        return facility;
     }
 }

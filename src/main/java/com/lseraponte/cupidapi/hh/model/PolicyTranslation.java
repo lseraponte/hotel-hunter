@@ -3,6 +3,9 @@ package com.lseraponte.cupidapi.hh.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -22,11 +25,12 @@ import lombok.Setter;
 @Builder
 public class PolicyTranslation {
 
-    @EmbeddedId
-    private PolicyTranslationId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "policy_translation_id")
+    private Integer id;
 
     @ManyToOne
-    @MapsId("policyId")
     @JoinColumn(name = "policy_id", nullable = false)
     private Policy policy;
 
@@ -47,4 +51,7 @@ public class PolicyTranslation {
 
     @Column(name = "parking")
     private String parking;
+
+    @Column(name = "language", nullable = false)
+    private String language;
 }

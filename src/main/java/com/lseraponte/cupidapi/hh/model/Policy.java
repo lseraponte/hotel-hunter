@@ -42,17 +42,25 @@ public class Policy {
     private List<PolicyTranslation> translations;
 
     // Convert from DTO to Entity
-    public static Policy fromDTO(PolicyDTO dto, Hotel hotel) {
-        return Policy.builder()
+    public static Policy fromDTO(PolicyDTO dto, Hotel hotel, String language) {
+
+        Policy policy = Policy.builder()
                 .hotel(hotel)
-                .translations(List.of(PolicyTranslation.builder()
-                        .policyType(dto.policyType())
-                        .name(dto.name())
-                        .description(dto.description())
-                        .childAllowed(dto.childAllowed())
-                        .petsAllowed(dto.petsAllowed())
-                        .parking(dto.parking())
-                        .build()))
                 .build();
+
+        PolicyTranslation translation = PolicyTranslation.builder()
+                .policy(policy)
+                .policyType(dto.policyType())
+                .name(dto.name())
+                .description(dto.description())
+                .childAllowed(dto.childAllowed())
+                .petsAllowed(dto.petsAllowed())
+                .parking(dto.parking())
+                .language(language)
+                .build();
+
+        policy.setTranslations(List.of(translation));
+
+        return policy;
     }
 }

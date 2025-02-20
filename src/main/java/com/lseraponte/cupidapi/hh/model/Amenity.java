@@ -42,11 +42,23 @@ public class Amenity {
     private List<AmenityTranslation> translations;
 
     // Convert from DTO to Entity
-    public static Amenity fromDTO(RoomDTO.AmenityDTO dto) {
-        return Amenity.builder()
+    public static Amenity fromDTO(RoomDTO.AmenityDTO dto, Room room, String language) {
+
+        Amenity amenity = Amenity.builder()
                 .amenityId(dto.amenitiesId())
+                .room(room)
                 .sort(dto.sort())
-                .translations(List.of(AmenityTranslation.builder().name(dto.name()).build()))
                 .build();
+
+        AmenityTranslation translation = AmenityTranslation.builder()
+                .amenity(amenity)
+                .name(dto.name())
+                .language(language)
+                .build();
+
+        amenity.setTranslations(List.of(translation));
+
+        return amenity;
     }
 }
+

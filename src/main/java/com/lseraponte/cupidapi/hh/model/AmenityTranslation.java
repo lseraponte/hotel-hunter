@@ -3,6 +3,9 @@ package com.lseraponte.cupidapi.hh.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -22,14 +25,19 @@ import lombok.Setter;
 @Builder
 public class AmenityTranslation {
 
-    @EmbeddedId
-    private AmenityTranslationId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "amenity_translation_id")
+    private Integer id;
 
     @ManyToOne
-    @MapsId("amenityId")
     @JoinColumn(name = "amenity_id", nullable = false)
     private Amenity amenity;
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "language", nullable = false)
+    private String language;
 }
+

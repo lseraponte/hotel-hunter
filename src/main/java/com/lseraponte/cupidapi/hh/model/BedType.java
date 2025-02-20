@@ -41,17 +41,26 @@ public class BedType {
     @Column(name = "quantity")
     private int quantity;
 
-    @OneToMany(mappedBy = "bedTypeObject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bedType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BedTypeTranslation> translations;
 
     // Convert from DTO to Entity
-    public static BedType fromDTO(RoomDTO.BedTypeDTO dto) {
-        return BedType.builder()
+    public static BedType fromDTO(RoomDTO.BedTypeDTO dto, Room room, String language) {
+
+        BedType bedType = BedType.builder()
                 .quantity(dto.quantity())
-                .translations(List.of(BedTypeTranslation.builder()
-                        .bedType(dto.bedType())
-                        .bedSize(dto.bedSize())
-                        .build()))
+                .room(room)
                 .build();
+
+        BedTypeTranslation translation = BedTypeTranslation.builder()
+                .bedTypeName(dto.bedType())
+                .bedSize(dto.bedSize())
+                .bedType(bedType)
+                .language(language)
+                .build();
+
+        bedType.setTranslations(List.of(translation));
+
+        return bedType;
     }
 }

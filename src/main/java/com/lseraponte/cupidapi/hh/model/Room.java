@@ -3,9 +3,7 @@ package com.lseraponte.cupidapi.hh.model;
 import com.lseraponte.cupidapi.hh.dto.PhotoDTO;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +18,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -72,8 +73,8 @@ public class Room {
     private List<Photo> photos;
 
     // Convert from DTO to Entity
-    public static Room fromDTO(RoomDTO dto, Hotel hotel) {
-        return Room.builder()
+    public static Room fromDTO(RoomDTO dto, Hotel hotel, String language) {
+        Room room = Room.builder()
                 .roomName(dto.roomName())
                 .description(dto.description())
                 .roomSizeSquare(dto.roomSizeSquare())
@@ -81,32 +82,18 @@ public class Room {
                 .maxAdults(dto.maxAdults())
                 .maxChildren(dto.maxChildren())
                 .maxOccupancy(dto.maxOccupancy())
-                .hotel(hotel)
-                .bedTypes(convertToBedTypeEntities(dto.bedTypes()))  // Convert BedTypeDTO to BedType
-                .roomAmenities(convertToAmenityEntities(dto.roomAmenities()))  // Convert AmenityDTO to Amenity
-                .photos(convertToPhotoEntities(dto.photos(), hotel))  // Convert PhotoDTO to Photo
+                .hotel(hotel)// Convert PhotoDTO to Photo
                 .build();
+
+        room.setBedTypes(Optional.ofNullable(dto.bedTypes()).orElse(Collections.emptyList()).stream()
+                .map(bedTypeDTO -> BedType.fromDTO(bedTypeDTO, room, language)).collect(Collectors.toList()));
+        room.setRoomAmenities(Optional.ofNullable(dto.roomAmenities()).orElse(Collections.emptyList()).stream()
+                .map(amenityDTO -> Amenity.fromDTO(amenityDTO, room, language)).collect(Collectors.toList()));
+        room.setPhotos(Optional.ofNullable(dto.photos()).orElse(Collections.emptyList()).stream()
+                .map(photoDTO -> Photo.fromDTO(photoDTO, hotel)).collect(Collectors.toList()));
+
+        return room;
     }
 
-    // Helper method to convert BedTypeDTO to BedType
-    private static List<BedType> convertToBedTypeEntities(List<RoomDTO.BedTypeDTO> bedTypeDTOs) {
-        return bedTypeDTOs.stream()
-                .map(BedType::fromDTO)  // Using BedType's fromDTO method
-                .collect(Collectors.toList());
-    }
-
-    // Helper method to convert AmenityDTO to Amenity
-    private static List<Amenity> convertToAmenityEntities(List<RoomDTO.AmenityDTO> amenityDTOs) {
-        return amenityDTOs.stream()
-                .map(Amenity::fromDTO)  // Using Amenity's fromDTO method
-                .collect(Collectors.toList());
-    }
-
-    // Helper method to convert PhotoDTO to Photo, passing the hotel for each photo
-    private static List<Photo> convertToPhotoEntities(List<PhotoDTO> photoDTOs, Hotel hotel) {
-        return photoDTOs.stream()
-                .map(photoDTO -> Photo.fromDTO(photoDTO, hotel))  // Using Photo's fromDTO method
-                .collect(Collectors.toList());
-    }
 }
 

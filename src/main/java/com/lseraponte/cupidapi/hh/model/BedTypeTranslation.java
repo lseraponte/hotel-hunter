@@ -1,11 +1,12 @@
 package com.lseraponte.cupidapi.hh.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,17 +23,22 @@ import lombok.Setter;
 @Builder
 public class BedTypeTranslation {
 
-    @EmbeddedId
-    private BedTypeTranslationId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bed_type_translation_id")
+    private Integer id;
 
     @ManyToOne
-    @MapsId("bedTypeId")
     @JoinColumn(name = "bed_type_id", nullable = false)
-    private BedType bedTypeObject;
+    private BedType bedType;
 
     @Column(name = "bed_type")
-    private String bedType;
+    private String bedTypeName;
 
     @Column(name = "bed_size")
     private String bedSize;
+
+    @Column(name = "language", nullable = false)
+    private String language;
 }
+

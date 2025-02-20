@@ -11,9 +11,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -116,7 +117,7 @@ public class Hotel {
     private List<HotelTranslation> translations;
 
     // Method to convert from DTO to Entity
-    public static Hotel fromDTO(HotelDTO dto) {
+    public static Hotel fromDTO(HotelDTO dto, String language) {
         Hotel hotel = Hotel.builder()
                 .hotelId(dto.hotelId())
                 .cupidId(dto.cupidId())
@@ -140,21 +141,31 @@ public class Hotel {
                 .groupRoomMin(dto.groupRoomMin())
                 .childAllowed(dto.childAllowed())
                 .petsAllowed(dto.petsAllowed())
-                .translations(List.of(HotelTranslation.builder()
-                                .hotelType(dto.hotelType())
-                                .chain(dto.chain())
-                                .hotelName(dto.hotelName())
-                                .description(dto.description())
-                                .importantInfo(dto.importantInfo())
-                                .markdownDescription(dto.markdownDescription())
-                        .build()))
                 .build();
 
-        hotel.setPhotos(dto.photos().stream().map(photoDTO -> Photo.fromDTO(photoDTO, hotel)).collect(Collectors.toList()));
-        hotel.setFacilities(dto.facilities().stream().map(facilityDTO -> Facility.fromDTO(facilityDTO, hotel)).collect(Collectors.toList()));
-        hotel.setPolicies(dto.policies().stream().map(policyDTO -> Policy.fromDTO(policyDTO, hotel)).collect(Collectors.toList()));
-        hotel.setRooms(dto.rooms().stream().map(roomDTO -> Room.fromDTO(roomDTO, hotel)).collect(Collectors.toList()));
-        hotel.setReviews(dto.reviews().stream().map(reviewDTO -> Review.fromDTO(reviewDTO, hotel)).collect(Collectors.toList()));
+        HotelTranslation translation = HotelTranslation.builder()
+                .hotel(hotel)
+                .language(language)
+                .hotelType(dto.hotelType())
+                .chain(dto.chain())
+                .hotelName(dto.hotelName())
+                .description(dto.description())
+                .importantInfo(dto.importantInfo())
+                .markdownDescription(dto.markdownDescription())
+                .build();
+
+        hotel.setTranslations(List.of(translation));
+
+        hotel.setPhotos(Optional.ofNullable(dto.photos()).orElse(Collections.emptyList()).stream()
+                .map(photoDTO -> Photo.fromDTO(photoDTO, hotel)).collect(Collectors.toList()));
+        hotel.setFacilities(Optional.ofNullable(dto.facilities()).orElse(Collections.emptyList()).stream()
+                .map(facilityDTO -> Facility.fromDTO(facilityDTO, hotel, language)).collect(Collectors.toList()));
+        hotel.setPolicies(Optional.ofNullable(dto.policies()).orElse(Collections.emptyList()).stream()
+                .map(policyDTO -> Policy.fromDTO(policyDTO, hotel, language)).collect(Collectors.toList()));
+        hotel.setRooms(Optional.ofNullable(dto.rooms()).orElse(Collections.emptyList()).stream()
+                .map(roomDTO -> Room.fromDTO(roomDTO, hotel, language)).collect(Collectors.toList()));
+        hotel.setReviews(Optional.ofNullable(dto.reviews()).orElse(Collections.emptyList()).stream()
+                .map(reviewDTO -> Review.fromDTO(reviewDTO, hotel)).collect(Collectors.toList()));
 
         return hotel;
     }
