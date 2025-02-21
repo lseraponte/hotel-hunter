@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,7 @@ public class AmenityTranslation {
 
     @ManyToOne
     @JoinColumn(name = "amenity_id", nullable = false)
+    @JsonBackReference
     private Amenity amenity;
 
     @Column(name = "name")
@@ -39,5 +41,5 @@ public class AmenityTranslation {
 
     @Column(name = "language", nullable = false)
     private String language;
-}
 
+}

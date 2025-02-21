@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,7 @@ public class FacilityTranslation {
 
     @ManyToOne
     @JoinColumn(name = "facility_id", nullable = false)
+    @JsonBackReference
     private Facility facility;
 
     @Column(name = "facility_name")
@@ -39,4 +41,5 @@ public class FacilityTranslation {
 
     @Column(name = "language", nullable = false)
     private String language;
+
 }

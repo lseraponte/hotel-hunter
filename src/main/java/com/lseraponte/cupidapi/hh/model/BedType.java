@@ -1,5 +1,7 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,7 +20,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.util.List;
 
 @Entity
@@ -38,11 +39,13 @@ public class BedType {
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = true)
+    @JsonBackReference
     private Room room;
 
     @Column(name = "quantity")
     private int quantity;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "bedType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BedTypeTranslation> translations;
 
@@ -65,4 +68,5 @@ public class BedType {
 
         return bedType;
     }
+
 }

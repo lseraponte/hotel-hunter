@@ -1,5 +1,7 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lseraponte.cupidapi.hh.dto.FacilityDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -37,8 +39,10 @@ public class Facility {
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
+    @JsonBackReference
     private Hotel hotel;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "facility", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FacilityTranslation> translations;
 
@@ -59,4 +63,5 @@ public class Facility {
 
         return facility;
     }
+
 }

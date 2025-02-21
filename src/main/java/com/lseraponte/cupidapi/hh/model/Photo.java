@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lseraponte.cupidapi.hh.dto.PhotoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,10 +34,12 @@ public class Photo {
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
+    @JsonBackReference
     private Hotel hotel;
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = true)
+    @JsonBackReference
     private Room room;
 
     @Column(name = "url")
@@ -81,4 +84,5 @@ public class Photo {
                 .hotel(hotel)
                 .build();
     }
+
 }

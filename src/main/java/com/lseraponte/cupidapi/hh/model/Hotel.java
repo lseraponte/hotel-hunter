@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lseraponte.cupidapi.hh.dto.HotelDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -97,21 +98,27 @@ public class Hotel {
     @Column(name = "pets_allowed")
     private boolean petsAllowed;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Photo> photos;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Facility> facilities;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Policy> policies;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Room> rooms;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviews;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<HotelTranslation> translations;
 
@@ -168,4 +175,5 @@ public class Hotel {
 
         return hotel;
     }
+
 }

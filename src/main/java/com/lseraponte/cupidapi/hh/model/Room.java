@@ -1,12 +1,12 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -34,12 +34,12 @@ import java.util.stream.Collectors;
 public class Room {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id")
     private int id;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
+    @JsonBackReference
     private Hotel hotel;
 
     @Column(name = "room_name")
@@ -63,18 +63,22 @@ public class Room {
     @Column(name = "max_occupancy")
     private int maxOccupancy;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BedType> bedTypes;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Amenity> roomAmenities;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Photo> photos;
 
     // Convert from DTO to Entity
     public static Room fromDTO(RoomDTO dto, Hotel hotel, String language) {
         Room room = Room.builder()
+                .id(dto.id())
                 .roomName(dto.roomName())
                 .description(dto.description())
                 .roomSizeSquare(dto.roomSizeSquare())
@@ -96,4 +100,3 @@ public class Room {
     }
 
 }
-

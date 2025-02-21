@@ -1,5 +1,7 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lseraponte.cupidapi.hh.dto.PolicyDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -38,9 +40,11 @@ public class Policy {
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
+    @JsonBackReference
     private Hotel hotel;
 
-    @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PolicyTranslation> translations;
 
     // Convert from DTO to Entity
@@ -65,4 +69,5 @@ public class Policy {
 
         return policy;
     }
+
 }

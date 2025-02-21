@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,7 @@ public class BedTypeTranslation {
 
     @ManyToOne
     @JoinColumn(name = "bed_type_id", nullable = false)
+    @JsonBackReference
     private BedType bedType;
 
     @Column(name = "bed_type")
@@ -43,4 +45,3 @@ public class BedTypeTranslation {
     @Column(name = "language", nullable = false)
     private String language;
 }
-

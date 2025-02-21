@@ -22,8 +22,10 @@ public class HotelController {
 
     @PostMapping
     public ResponseEntity<Hotel> saveHotel(@RequestBody HotelDTO hotelDTO, @RequestParam String language) {
+
         Hotel hotel = Hotel.fromDTO(hotelDTO, language);
         Hotel savedHotel = hotelService.saveHotelWithTranslation(hotel, language);
+
         return ResponseEntity.ok(savedHotel);
     }
 
@@ -33,4 +35,5 @@ public class HotelController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
 }
