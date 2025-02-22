@@ -27,7 +27,7 @@ public class Facility {
 
     @Id
     @Column(name = "facility_id")
-    private int facilityId;
+    private Integer facilityId;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "facility_id")

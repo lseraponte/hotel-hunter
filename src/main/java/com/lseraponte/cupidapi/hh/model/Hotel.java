@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Collections;
@@ -103,8 +105,12 @@ public class Hotel {
     @JoinColumn(name = "hotel_id")
     private List<Photo> photos;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "hotel_facilities",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "facility_id")
+    )
     private List<Facility> facilities;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
