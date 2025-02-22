@@ -8,6 +8,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Collections;
@@ -98,28 +99,28 @@ public class Hotel {
     @Column(name = "pets_allowed")
     private boolean petsAllowed;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
     private List<Photo> photos;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
     private List<Facility> facilities;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
     private List<Policy> policies;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
     private List<Room> rooms;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
     private List<Review> reviews;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
     private List<HotelTranslation> translations;
 
     // Method to convert from DTO to Entity
@@ -150,7 +151,6 @@ public class Hotel {
                 .build();
 
         HotelTranslation translation = HotelTranslation.builder()
-                .hotel(hotel)
                 .language(language)
                 .hotelType(dto.hotelType())
                 .chain(dto.chain())

@@ -1,22 +1,18 @@
 package com.lseraponte.cupidapi.hh.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -27,18 +23,12 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"hotel"})
 public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
-    @JsonBackReference
-    private Hotel hotel;
 
     @Column(name = "average_score")
     private int averageScore;
@@ -72,7 +62,6 @@ public class Review {
     // Utility Method to Convert DTO to Entity
     public static Review fromDTO(ReviewDTO dto, Hotel hotel) {
         return Review.builder()
-                .hotel(hotel)
                 .averageScore(dto.averageScore())
                 .country(dto.country())
                 .type(dto.type())

@@ -1,7 +1,5 @@
 package com.lseraponte.cupidapi.hh.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -19,7 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import java.util.List;
 
 @Entity
@@ -29,7 +25,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"room"})
 public class BedType {
 
     @Id
@@ -37,16 +32,11 @@ public class BedType {
     @Column(name = "bed_type_id")
     private int bedTypeId;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id", nullable = true)
-    @JsonBackReference
-    private Room room;
-
     @Column(name = "quantity")
     private int quantity;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "bedType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "bed_type_id")
     private List<BedTypeTranslation> translations;
 
     // Convert from DTO to Entity
@@ -54,13 +44,11 @@ public class BedType {
 
         BedType bedType = BedType.builder()
                 .quantity(dto.quantity())
-                .room(room)
                 .build();
 
         BedTypeTranslation translation = BedTypeTranslation.builder()
                 .bedTypeName(dto.bedType())
                 .bedSize(dto.bedSize())
-                .bedType(bedType)
                 .language(language)
                 .build();
 

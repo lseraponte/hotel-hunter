@@ -1,7 +1,5 @@
 package com.lseraponte.cupidapi.hh.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -17,7 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -30,23 +27,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"hotel"})
 public class Room {
 
     @Id
     @Column(name = "room_id")
     private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
-    @JsonBackReference
-    private Hotel hotel;
-
-    @Column(name = "room_name")
-    private String roomName;
-
-    @Column(name = "description")
-    private String description;
 
     @Column(name = "room_size_square")
     private int roomSizeSquare;
@@ -63,31 +48,40 @@ public class Room {
     @Column(name = "max_occupancy")
     private int maxOccupancy;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
     private List<BedType> bedTypes;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
     private List<Amenity> roomAmenities;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
     private List<Photo> photos;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private List<RoomTranslation> translations;
 
     // Convert from DTO to Entity
     public static Room fromDTO(RoomDTO dto, Hotel hotel, String language) {
         Room room = Room.builder()
                 .id(dto.id())
-                .roomName(dto.roomName())
-                .description(dto.description())
                 .roomSizeSquare(dto.roomSizeSquare())
                 .roomSizeUnit(dto.roomSizeUnit())
                 .maxAdults(dto.maxAdults())
                 .maxChildren(dto.maxChildren())
                 .maxOccupancy(dto.maxOccupancy())
-                .hotel(hotel)// Convert PhotoDTO to Photo
                 .build();
+
+        RoomTranslation translation = RoomTranslation.builder()
+                .roomName(dto.roomName())
+                .description(dto.description())
+                .language(language)
+                .build();
+
+        room.setTranslations(List.of(translation));
 
         room.setBedTypes(Optional.ofNullable(dto.bedTypes()).orElse(Collections.emptyList()).stream()
                 .map(bedTypeDTO -> BedType.fromDTO(bedTypeDTO, room, language)).collect(Collectors.toList()));

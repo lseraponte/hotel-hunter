@@ -1,21 +1,17 @@
 package com.lseraponte.cupidapi.hh.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lseraponte.cupidapi.hh.dto.PhotoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "photos")
@@ -24,23 +20,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"hotel", "room"})
 public class Photo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "photo_id")
     private int photoId;
-
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
-    @JsonBackReference
-    private Hotel hotel;
-
-    @ManyToOne
-    @JoinColumn(name = "room_id", nullable = true)
-    @JsonBackReference
-    private Room room;
 
     @Column(name = "url")
     private String url;
@@ -81,7 +66,6 @@ public class Photo {
                 .score(dto.score())
                 .classId(dto.classId())
                 .classOrder(dto.classOrder())
-                .hotel(hotel)
                 .build();
     }
 

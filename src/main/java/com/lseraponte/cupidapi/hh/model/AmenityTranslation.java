@@ -23,18 +23,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"amenity"})
 public class AmenityTranslation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "amenity_translation_id")
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "amenity_id", nullable = false)
-    @JsonBackReference
-    private Amenity amenity;
 
     @Column(name = "name")
     private String name;
