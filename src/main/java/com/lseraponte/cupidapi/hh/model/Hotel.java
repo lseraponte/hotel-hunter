@@ -177,7 +177,7 @@ public class Hotel {
         hotel.setRooms(Optional.ofNullable(dto.rooms()).orElse(Collections.emptyList()).stream()
                 .map(roomDTO -> Room.fromDTO(roomDTO, hotel, language)).collect(Collectors.toList()));
         hotel.setReviews(Optional.ofNullable(dto.reviews()).orElse(Collections.emptyList()).stream()
-                .map(reviewDTO -> Review.fromDTO(reviewDTO, hotel)).collect(Collectors.toList()));
+                .map(Review::fromDTO).collect(Collectors.toList()));
 
         return hotel;
     }

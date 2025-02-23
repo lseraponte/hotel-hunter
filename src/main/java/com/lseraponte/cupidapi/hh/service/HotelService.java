@@ -1,9 +1,11 @@
 package com.lseraponte.cupidapi.hh.service;
 
+import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import com.lseraponte.cupidapi.hh.model.Amenity;
 import com.lseraponte.cupidapi.hh.model.Facility;
 import com.lseraponte.cupidapi.hh.model.Hotel;
 import com.lseraponte.cupidapi.hh.model.Policy;
+import com.lseraponte.cupidapi.hh.model.Review;
 import com.lseraponte.cupidapi.hh.model.Room;
 import com.lseraponte.cupidapi.hh.repository.AmenityRepository;
 import com.lseraponte.cupidapi.hh.repository.FacilityRepository;
@@ -109,7 +111,7 @@ public class HotelService {
             }
         }
 
-
+        // Reusing pre-existing Room Amenities and Facilities.
         for (Room room : hotel.getRooms()) {
             List<Amenity> updatedAmenities = new ArrayList<>();
 
@@ -122,7 +124,6 @@ public class HotelService {
 
             room.setRoomAmenities(updatedAmenities);
         }
-
         List<Facility> updatedFacilities = new ArrayList<>();
         for (Facility facility : hotel.getFacilities()) {
             Facility existingFacility = facilityRepository.findByFacilityId(facility.getFacilityId())
@@ -145,6 +146,37 @@ public class HotelService {
         }
 
         return hotelRepository.findByHotelId(hotelId);
+
+    }
+
+    public List<Review> addHotelReviews(Integer hotelId, List<ReviewDTO> reviewDTOList) {
+
+        Optional<Hotel> savedHotel = hotelRepository.findById(hotelId);
+        if (savedHotel.isEmpty())
+            return null;
+
+        List<Review> reviewList = new ArrayList<>();
+        for (ReviewDTO reviewDto : reviewDTOList) {
+            reviewList.add(Review.fromDTO(reviewDto));
+        }
+
+        savedHotel.get().setReviews(reviewList);
+        hotelRepository.save(savedHotel.get());
+
+        return reviewList;
+
+    }
+
+    public List<Review> getHotelReviews(Integer hotelId, String language) {
+
+        List<Review> reviewList;
+
+        if (Objects.nonNull(language))
+            reviewList = hotelRepository.findReviewsByHotelIdAndLanguage(hotelId, language);
+        else
+            reviewList = hotelRepository.findReviewsByHotelId(hotelId);
+
+        return reviewList;
 
     }
 }

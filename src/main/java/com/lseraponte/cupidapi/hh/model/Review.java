@@ -28,7 +28,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "average_score")
     private int averageScore;
@@ -60,7 +60,7 @@ public class Review {
     private String cons;
 
     // Utility Method to Convert DTO to Entity
-    public static Review fromDTO(ReviewDTO dto, Hotel hotel) {
+    public static Review fromDTO(ReviewDTO dto) {
         return Review.builder()
                 .averageScore(dto.averageScore())
                 .country(dto.country())
