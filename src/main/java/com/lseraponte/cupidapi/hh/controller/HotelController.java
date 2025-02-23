@@ -28,23 +28,25 @@ public class HotelController {
     private final HotelService hotelService;
 
     @PostMapping
-    public ResponseEntity<Hotel> saveHotel(@RequestBody HotelDTO hotelDTO, @RequestParam String language) {
+    public ResponseEntity<Hotel> saveHotel(@RequestBody HotelDTO hotelDTO,
+                                           @RequestBody(required = false) List<ReviewDTO> reviewDTOList,
+                                           @RequestParam String language) {
 
-        Hotel hotel = Hotel.fromDTO(hotelDTO, language);
-        Hotel savedHotel = hotelService.saveHotelWithTranslation(hotel, language);
-
+        Hotel savedHotel = hotelService.saveHotelWithTranslation(hotelDTO, language, reviewDTOList);
         return ResponseEntity.ok(savedHotel);
     }
 
     @GetMapping("/{hotelId}")
-    public ResponseEntity<Hotel> getHotel(@PathVariable int hotelId, @RequestParam String language) {
+    public ResponseEntity<Hotel> getHotel(@PathVariable int hotelId,
+                                          @RequestParam(required = false) String language) {
         return hotelService.getHotelByIdWithTranslation(hotelId, language)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/reviews")
-    public ResponseEntity<List<Review>> addingHotelReviews(@RequestBody List<ReviewDTO> reviewDTOList, @RequestParam Integer hotelId) {
+    public ResponseEntity<List<Review>> addingHotelReviews(@RequestBody List<ReviewDTO> reviewDTOList,
+                                                           @RequestParam Integer hotelId) {
 
         List<Review> savedReviews = hotelService.addHotelReviews(hotelId, reviewDTOList);
         if (Objects.nonNull(savedReviews))
@@ -54,7 +56,8 @@ public class HotelController {
     }
 
     @GetMapping("/reviews/{hotelId}")
-    public ResponseEntity<List<Review>> getReviews(@PathVariable int hotelId, @RequestParam(required = false) String language) {
+    public ResponseEntity<List<Review>> getReviews(@PathVariable int hotelId,
+                                                   @RequestParam(required = false) String language) {
         List<Review> hotelReviews = hotelService.getHotelReviews(hotelId, language);
 
         if (hotelReviews.isEmpty()) {
