@@ -71,7 +71,7 @@ public class Room {
     private List<RoomTranslation> translations;
 
     // Convert from DTO to Entity
-    public static Room fromDTO(RoomDTO dto, Hotel hotel, String language) {
+    public static Room fromDTO(RoomDTO dto, String language) {
         Room room = Room.builder()
                 .id(dto.id())
                 .roomSizeSquare(dto.roomSizeSquare())
@@ -94,7 +94,7 @@ public class Room {
         room.setRoomAmenities(Optional.ofNullable(dto.roomAmenities()).orElse(Collections.emptyList()).stream()
                 .map(amenityDTO -> Amenity.fromDTO(amenityDTO, room, language)).collect(Collectors.toList()));
         room.setPhotos(Optional.ofNullable(dto.photos()).orElse(Collections.emptyList()).stream()
-                .map(photoDTO -> Photo.fromDTO(photoDTO, hotel)).collect(Collectors.toList()));
+                .map(photoDTO -> Photo.fromDTO(photoDTO)).collect(Collectors.toList()));
 
         return room;
     }

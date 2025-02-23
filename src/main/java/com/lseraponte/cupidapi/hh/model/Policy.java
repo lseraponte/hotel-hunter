@@ -1,22 +1,18 @@
 package com.lseraponte.cupidapi.hh.model;
 
 import com.lseraponte.cupidapi.hh.dto.PolicyDTO;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.List;
 
 @Entity
 @Table(name = "policies")
@@ -32,17 +28,32 @@ public class Policy {
     @Column(name = "policy_id")
     private Integer policyId;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "policy_id")
-    private List<PolicyTranslation> translations;
+    @Column(name = "policy_type")
+    private String policyType;
+
+    @Column(name = "name")
+    private String name;
+
+    @Lob
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "child_allowed")
+    private String childAllowed;
+
+    @Column(name = "pets_allowed")
+    private String petsAllowed;
+
+    @Column(name = "parking")
+    private String parking;
+
+    @Column(name = "language", nullable = false)
+    private String language;
 
     // Convert from DTO to Entity
-    public static Policy fromDTO(PolicyDTO dto, Hotel hotel, String language) {
+    public static Policy fromDTO(PolicyDTO dto, String language) {
 
-        Policy policy = Policy.builder()
-                .build();
-
-        PolicyTranslation translation = PolicyTranslation.builder()
+        return Policy.builder()
                 .policyType(dto.policyType())
                 .name(dto.name())
                 .description(dto.description())
@@ -52,9 +63,6 @@ public class Policy {
                 .language(language)
                 .build();
 
-        policy.setTranslations(List.of(translation));
-
-        return policy;
     }
 
 }

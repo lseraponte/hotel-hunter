@@ -11,12 +11,13 @@ import com.lseraponte.cupidapi.hh.model.Room;
 import com.lseraponte.cupidapi.hh.repository.AmenityRepository;
 import com.lseraponte.cupidapi.hh.repository.FacilityRepository;
 import com.lseraponte.cupidapi.hh.repository.HotelRepository;
+import com.lseraponte.cupidapi.hh.repository.PolicyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +33,7 @@ public class HotelService {
     private final HotelRepository hotelRepository;
     private final FacilityRepository facilityRepository;
     private final AmenityRepository amenityRepository;
+    private final PolicyRepository policyRepository;
 
     public Hotel saveHotelWithTranslation(HotelDTO hotelDTO, String language, List<ReviewDTO> reviewDTOList) {
 
@@ -46,24 +48,26 @@ public class HotelService {
             }
         }
 
-        Optional<Hotel> savedHotel = hotelRepository.findByIdWithTranslationsByLanguage(hotel.getHotelId(), language);
+        Optional<Hotel> savedHotel = hotelRepository.findById(hotel.getHotelId());
         if (savedHotel.isPresent()) {
             Hotel retrievedHotel = savedHotel.get();
-            if (containsReviews && savedHotel.get().getReviews() == null) {
-                retrievedHotel.setReviews(reviewList);
-                retrievedHotel = hotelRepository.save(retrievedHotel);
-            }
-            return retrievedHotel;
-        }
-
-        if (!"en".equals(language)) {
-            savedHotel = hotelRepository.findByIdWithTranslationsByLanguage(hotel.getHotelId(), "en");
-            if (savedHotel.isPresent()) {
-                Hotel retrievedHotel = savedHotel.get();
+            boolean hasLanguage = retrievedHotel.getTranslations()
+                    .stream()
+                    .anyMatch(translation -> language.equalsIgnoreCase(translation.getLanguage()));
+            if(hasLanguage) {
+                if (containsReviews && retrievedHotel.getReviews() == null) {
+                    retrievedHotel.setReviews(reviewList);
+                    retrievedHotel = hotelRepository.save(retrievedHotel);
+                }
+                return retrievedHotel;
+            } else {
                 retrievedHotel.getTranslations().add(hotel.getTranslations().get(0));
                 if (Objects.nonNull(hotel.getRooms())) {
+                    retrievedHotel.getRooms().sort(Comparator.comparing(Room::getId));
+                    hotel.getRooms().sort(Comparator.comparing(Room::getId));
                     for (int i = 0; i < retrievedHotel.getRooms().size(); i++) {
-                        retrievedHotel.getRooms().get(i).getTranslations().add(hotel.getRooms().get(i).getTranslations().get(0));
+                        Room currentRoomSavedRoom = retrievedHotel.getRooms().get(i);
+                        currentRoomSavedRoom.getTranslations().add(hotel.getRooms().get(i).getTranslations().get(0));
                         List<Amenity> updatedAmenities = new ArrayList<>();
                         for (Amenity amenity : hotel.getRooms().get(i).getRoomAmenities()) {
                             Optional<Amenity> savedAmenity = amenityRepository.findByAmenityId(amenity.getAmenityId());
@@ -79,30 +83,23 @@ public class HotelService {
                                 updatedAmenities.add(amenityRepository.save(amenity));
                             }
                         }
-                        retrievedHotel.getRooms().get(i).setRoomAmenities(updatedAmenities);
+                        currentRoomSavedRoom.setRoomAmenities(updatedAmenities);
 
                     }
                 }
                 if (Objects.nonNull(hotel.getPolicies()) && !hotel.getPolicies().isEmpty()) {
 
-                    Map<Integer, Policy> policyMap = hotel.getPolicies().stream()
-                            .collect(Collectors.toMap(Policy::getPolicyId, p -> p));
+                    Map<String, Policy> policyMap = retrievedHotel.getPolicies().stream()
+                            .collect(Collectors.toMap(Policy::getPolicyType, p -> p));
 
-                    for (Policy retrievedPolicy : retrievedHotel.getPolicies()) {
-                        Policy matchingPolicy = policyMap.get(retrievedPolicy.getPolicyId());
+                    for (Policy policy : hotel.getPolicies()) {
+                        Policy matchingPolicy = policyMap.get(policy.getPolicyType());
 
-                        if (matchingPolicy != null && !matchingPolicy.getTranslations().isEmpty()) {
-                            retrievedPolicy.getTranslations().add(matchingPolicy.getTranslations().get(0));
+                        if (matchingPolicy != null) {
+                            policy = policyMap.get(policy.getPolicyType());
                         }
                     }
 
-                    // If there are additional policies we'll be adding them at the end
-                    for (Policy newPolicy : hotel.getPolicies()) {
-                        if (retrievedHotel.getPolicies().stream()
-                                .noneMatch(p -> p.getPolicyId().equals(newPolicy.getPolicyId()))) {
-                            retrievedHotel.getPolicies().add(newPolicy);
-                        }
-                    }
                 }
                 if (Objects.nonNull(hotel.getFacilities()) && !hotel.getFacilities().isEmpty()) {
 
@@ -130,7 +127,8 @@ public class HotelService {
         }
 
         else {
-            // Reusing pre-existing Room Amenities, BedTypes and Facilities.
+            // Reusing pre-existing Room Amenities and Facilities.
+
             for (Room room : hotel.getRooms()) {
                 List<Amenity> updatedAmenities = new ArrayList<>();
 
@@ -153,6 +151,16 @@ public class HotelService {
             }
             hotel.setFacilities(updatedFacilities);
 
+        }
+
+        // Reusing existing Policies
+        if (Objects.nonNull(hotel.getPolicies()) && !hotel.getPolicies().isEmpty()) {
+            List<Policy> updatedPolicies = new ArrayList<>();
+            for (Policy policy : hotel.getPolicies()) {
+                Optional<Policy> savedPolicy = policyRepository.findByPolicyType(policy.getPolicyType());
+                updatedPolicies.add(savedPolicy.orElse(policy));
+            }
+            hotel.setPolicies(updatedPolicies);
         }
 
         if(containsReviews)

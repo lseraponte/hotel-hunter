@@ -34,7 +34,7 @@ public class Facility {
     private List<FacilityTranslation> translations;
 
     // Convert from DTO to Entity
-    public static Facility fromDTO(FacilityDTO dto, Hotel hotel, String language) {
+    public static Facility fromDTO(FacilityDTO dto, String language) {
 
         Facility facility = Facility.builder()
                 .facilityId(dto.facilityId())

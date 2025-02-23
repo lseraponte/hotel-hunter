@@ -55,7 +55,7 @@ public class Photo {
     private int classOrder;
 
     // Convert from DTO to Entity
-    public static Photo fromDTO(PhotoDTO dto, Hotel hotel) {
+    public static Photo fromDTO(PhotoDTO dto) {
         return Photo.builder()
                 .url(dto.url())
                 .hdUrl(dto.hdUrl())

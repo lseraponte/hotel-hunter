@@ -113,8 +113,12 @@ public class Hotel {
     )
     private List<Facility> facilities;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "hotel_policies",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "policy_id")
+    )
     private List<Policy> policies;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -169,13 +173,13 @@ public class Hotel {
         hotel.setTranslations(List.of(translation));
 
         hotel.setPhotos(Optional.ofNullable(dto.photos()).orElse(Collections.emptyList()).stream()
-                .map(photoDTO -> Photo.fromDTO(photoDTO, hotel)).collect(Collectors.toList()));
+                .map(Photo::fromDTO).collect(Collectors.toList()));
         hotel.setFacilities(Optional.ofNullable(dto.facilities()).orElse(Collections.emptyList()).stream()
-                .map(facilityDTO -> Facility.fromDTO(facilityDTO, hotel, language)).collect(Collectors.toList()));
+                .map(facilityDTO -> Facility.fromDTO(facilityDTO, language)).collect(Collectors.toList()));
         hotel.setPolicies(Optional.ofNullable(dto.policies()).orElse(Collections.emptyList()).stream()
-                .map(policyDTO -> Policy.fromDTO(policyDTO, hotel, language)).collect(Collectors.toList()));
+                .map(policyDTO -> Policy.fromDTO(policyDTO, language)).collect(Collectors.toList()));
         hotel.setRooms(Optional.ofNullable(dto.rooms()).orElse(Collections.emptyList()).stream()
-                .map(roomDTO -> Room.fromDTO(roomDTO, hotel, language)).collect(Collectors.toList()));
+                .map(roomDTO -> Room.fromDTO(roomDTO, language)).collect(Collectors.toList()));
         hotel.setReviews(Optional.ofNullable(dto.reviews()).orElse(Collections.emptyList()).stream()
                 .map(Review::fromDTO).collect(Collectors.toList()));
 
