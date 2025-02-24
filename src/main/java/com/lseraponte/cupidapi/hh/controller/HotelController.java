@@ -39,7 +39,7 @@ public class HotelController {
     @GetMapping("/{hotelId}")
     public ResponseEntity<Hotel> getHotel(@PathVariable int hotelId,
                                           @RequestParam(required = false) String language) {
-        return hotelService.getHotelByIdWithTranslation(hotelId, language)
+        return hotelService.getHotelByIdWithTranslations(hotelId, language)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

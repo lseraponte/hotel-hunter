@@ -12,9 +12,9 @@ import com.lseraponte.cupidapi.hh.repository.AmenityRepository;
 import com.lseraponte.cupidapi.hh.repository.FacilityRepository;
 import com.lseraponte.cupidapi.hh.repository.HotelRepository;
 import com.lseraponte.cupidapi.hh.repository.PolicyRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class HotelService {
 
@@ -169,20 +168,45 @@ public class HotelService {
         return hotelRepository.save(hotel);
     }
 
-    public Optional<Hotel> getHotelByIdWithTranslation(int hotelId, String language) {
+    public Optional<Hotel> getHotelByIdWithTranslations(int hotelId, String language) {
 
-        Optional<Hotel> savedHotel;
-        if (Objects.nonNull(language)) {
-            savedHotel = hotelRepository.findByIdWithTranslationsByLanguage(hotelId, language);
-        } else {
-            savedHotel = hotelRepository.findById(hotelId);
+        if (language == null)
+            return hotelRepository.findById(hotelId);
+
+        else {
+            final String finalLanguage = language;
+
+            Optional<Hotel> savedHotel = hotelRepository.findByIdWithTranslationsByLanguage(hotelId, finalLanguage);
+            Hotel hotel = savedHotel.get();
+
+            // Filter collections' translations
+            for (Facility facility : hotel.getFacilities()) {
+                Hibernate.initialize(facility.getTranslations());  // Ensure the translations are loaded
+                facility.setTranslations(facility.getTranslations().stream()
+                        .filter(t -> t.getLanguage().equals(finalLanguage))
+                        .collect(Collectors.toList()));
+            }
+
+            hotel.setReviews(hotel.getReviews().stream()
+                    .filter(t -> t.getLanguage().equals(finalLanguage))
+                    .collect(Collectors.toList()));
+
+            for (Room room : hotel.getRooms()) {
+                Hibernate.initialize(room.getTranslations());  // Ensure the translations are loaded
+                room.setTranslations(room.getTranslations().stream()
+                        .filter(t -> t.getLanguage().equals(finalLanguage))
+                        .collect(Collectors.toList()));
+
+                for (Amenity amenity : room.getRoomAmenities()) {
+                    Hibernate.initialize(amenity.getTranslations());  // Ensure the translations are loaded
+                    amenity.setTranslations(amenity.getTranslations().stream()
+                            .filter(t -> t.getLanguage().equals(finalLanguage))
+                            .collect(Collectors.toList()));
+                }
+            }
+
+            return savedHotel;
         }
-        if (savedHotel.isEmpty() && !"EN".equals(language)) {
-            savedHotel = hotelRepository.findByIdWithTranslationsByLanguage(hotelId, "EN");
-        }
-
-        return hotelRepository.findByHotelId(hotelId);
-
     }
 
     public List<Review> addHotelReviews(Integer hotelId, List<ReviewDTO> reviewDTOList) {
