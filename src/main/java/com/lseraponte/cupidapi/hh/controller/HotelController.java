@@ -1,6 +1,7 @@
 package com.lseraponte.cupidapi.hh.controller;
 
 import com.lseraponte.cupidapi.hh.dto.HotelDTO;
+import com.lseraponte.cupidapi.hh.dto.HotelWithTranslationDTO;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import com.lseraponte.cupidapi.hh.model.Hotel;
 import com.lseraponte.cupidapi.hh.model.Review;
@@ -46,9 +47,6 @@ public class HotelController {
         return cupidApiService.getHotelReviews(id, reviewsLimit);
     }
 
-
-
-
     @PostMapping
     public ResponseEntity<Hotel> saveHotel(@RequestBody HotelDTO hotelDTO,
                                            @RequestBody(required = false) List<ReviewDTO> reviewDTOList,
@@ -74,10 +72,18 @@ public class HotelController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/search/location/{city}")
+    public ResponseEntity<List<HotelWithTranslationDTO>> getHotelByCity(@PathVariable String city,
+                                                                        @RequestParam(required = false) String language) {
+        return hotelService.getHotelsByCityWithTranslationsByLanguage(city, language)
+                .filter(list -> !list.isEmpty())
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/reviews")
     public ResponseEntity<List<Review>> addingHotelReviews(@RequestBody List<ReviewDTO> reviewDTOList,
                                                            @RequestParam Integer hotelId) {
-
         List<Review> savedReviews = hotelService.addHotelReviews(hotelId, reviewDTOList);
         if (Objects.nonNull(savedReviews))
             return ResponseEntity.ok(savedReviews);

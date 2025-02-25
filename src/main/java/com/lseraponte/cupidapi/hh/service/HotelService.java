@@ -1,6 +1,7 @@
 package com.lseraponte.cupidapi.hh.service;
 
 import com.lseraponte.cupidapi.hh.dto.HotelDTO;
+import com.lseraponte.cupidapi.hh.dto.HotelWithTranslationDTO;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import com.lseraponte.cupidapi.hh.model.Amenity;
 import com.lseraponte.cupidapi.hh.model.Facility;
@@ -198,6 +199,14 @@ public class HotelService {
         savedHotel.ifPresent(hotel -> filterHotelProperties(hotel, languageCode));
 
         return savedHotel;
+    }
+
+    public Optional<List<HotelWithTranslationDTO>> getHotelsByCityWithTranslationsByLanguage(String city, String language) {
+
+        Language langEnum = Language.fromString(language);
+        final String languageCode = langEnum.getCode();
+
+        return hotelRepository.findHotelsWithTranslationsByCityAndLanguage(city, languageCode);
     }
 
     public List<Review> addHotelReviews(Integer hotelId, List<ReviewDTO> reviewDTOList) {

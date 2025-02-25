@@ -30,8 +30,8 @@ public class HotelStartupService {
 
     @PostConstruct
     public void fetchHotelsOnStartup() {
-//        List<Integer> hotelIds = loadHotelIdsFromFile("hotel_ids.txt");
-        List<Integer> hotelIds = loadHotelIdsFromFile("partial_hotel_ids.txt");
+        List<Integer> hotelIds = loadHotelIdsFromFile("hotel_ids.txt");
+//        List<Integer> hotelIds = loadHotelIdsFromFile("partial_hotel_ids.txt");
 
         Flux.fromIterable(hotelIds)
                 .concatMap(hotelId -> {
