@@ -12,6 +12,7 @@ import com.lseraponte.cupidapi.hh.repository.AmenityRepository;
 import com.lseraponte.cupidapi.hh.repository.FacilityRepository;
 import com.lseraponte.cupidapi.hh.repository.HotelRepository;
 import com.lseraponte.cupidapi.hh.repository.PolicyRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
@@ -34,6 +35,7 @@ public class HotelService {
     private final AmenityRepository amenityRepository;
     private final PolicyRepository policyRepository;
 
+    @Transactional
     public Hotel saveHotelWithTranslation(HotelDTO hotelDTO, String language, List<ReviewDTO> reviewDTOList) {
 
         Hotel hotel = Hotel.fromDTO(hotelDTO, language);
@@ -102,24 +104,22 @@ public class HotelService {
                 }
                 if (Objects.nonNull(hotel.getFacilities()) && !hotel.getFacilities().isEmpty()) {
 
-                    Map<Integer, Facility> facilityMap = hotel.getFacilities().stream()
-                            .collect(Collectors.toMap(Facility::getFacilityId, f -> f));
-
-                    for (Facility retrievedFacility : retrievedHotel.getFacilities()) {
-                        Facility matchingFacility = facilityMap.get(retrievedFacility.getFacilityId());
-
-                        if (matchingFacility != null && !matchingFacility.getTranslations().isEmpty()) {
-                            retrievedFacility.getTranslations().add(matchingFacility.getTranslations().get(0));
+                    List<Facility> updatedFacilities = new ArrayList<>();
+                    for (Facility facility : hotel.getFacilities()) {
+                        Optional<Facility> savedFacility = facilityRepository.findByFacilityId(facility.getFacilityId());
+                        if (savedFacility.isPresent()) {
+                            Facility existingFacility = savedFacility.get();
+                            if (existingFacility.getTranslations().stream().noneMatch(
+                                    t -> language.equalsIgnoreCase(t.getLanguage())
+                            )) {
+                                existingFacility.getTranslations().add(facility.getTranslations().get(0));
+                            }
+                            updatedFacilities.add(savedFacility.get());
+                        } else {
+                            updatedFacilities.add(facilityRepository.save(facility));
                         }
                     }
-
-                    // If there are additional facilities we'll be adding them at the end
-                    for (Facility newFacility : hotel.getFacilities()) {
-                        if (retrievedHotel.getFacilities().stream()
-                                .noneMatch(f -> f.getFacilityId().equals(newFacility.getFacilityId()))) {
-                            retrievedHotel.getFacilities().add(newFacility);
-                        }
-                    }
+                    hotel.setFacilities(updatedFacilities);
                 }
                 hotel = retrievedHotel;
             }

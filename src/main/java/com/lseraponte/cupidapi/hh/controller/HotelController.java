@@ -4,6 +4,7 @@ import com.lseraponte.cupidapi.hh.dto.HotelDTO;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import com.lseraponte.cupidapi.hh.model.Hotel;
 import com.lseraponte.cupidapi.hh.model.Review;
+import com.lseraponte.cupidapi.hh.service.CupidApiService;
 import com.lseraponte.cupidapi.hh.service.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +29,25 @@ import java.util.Objects;
 public class HotelController {
 
     private final HotelService hotelService;
+    private final CupidApiService cupidApiService;
+
+    @GetMapping("/cupid-api/hotels/{id}")
+    public Mono<HotelDTO> getHotel(@PathVariable int id) {
+        return cupidApiService.getHotelById(id);
+    }
+
+    @GetMapping("/cupid-api/hotels/{id}/lang/{language}")
+    public Mono<HotelDTO> getHotelWithTranslation(@PathVariable int id, @PathVariable String language) {
+        return cupidApiService.getHotelByIdWithTranslation(id, language);
+    }
+
+    @GetMapping("/cupid-api/hotels/reviews/{id}/{reviewsLimit}")
+    public Flux<ReviewDTO> getReviews(@PathVariable int id, @PathVariable() int reviewsLimit) {
+        return cupidApiService.getHotelReviews(id, reviewsLimit);
+    }
+
+
+
 
     @PostMapping
     public ResponseEntity<Hotel> saveHotel(@RequestBody HotelDTO hotelDTO,
