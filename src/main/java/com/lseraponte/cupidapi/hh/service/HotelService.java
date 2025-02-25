@@ -4,6 +4,7 @@ import com.lseraponte.cupidapi.hh.dto.HotelDTO;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import com.lseraponte.cupidapi.hh.model.Amenity;
 import com.lseraponte.cupidapi.hh.model.Facility;
+import com.lseraponte.cupidapi.hh.model.FacilityTranslation;
 import com.lseraponte.cupidapi.hh.model.Hotel;
 import com.lseraponte.cupidapi.hh.model.Policy;
 import com.lseraponte.cupidapi.hh.model.Review;
@@ -12,6 +13,7 @@ import com.lseraponte.cupidapi.hh.repository.AmenityRepository;
 import com.lseraponte.cupidapi.hh.repository.FacilityRepository;
 import com.lseraponte.cupidapi.hh.repository.HotelRepository;
 import com.lseraponte.cupidapi.hh.repository.PolicyRepository;
+import com.lseraponte.cupidapi.hh.util.Language;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +40,10 @@ public class HotelService {
     @Transactional
     public Hotel saveHotelWithTranslation(HotelDTO hotelDTO, String language, List<ReviewDTO> reviewDTOList) {
 
-        Hotel hotel = Hotel.fromDTO(hotelDTO, language);
+        Language langEnum = Language.fromString(language);
+        final String languageCode = langEnum.getCode();
+
+        Hotel hotel = Hotel.fromDTO(hotelDTO, languageCode);
         boolean containsReviews = false;
         List<Review> reviewList = new ArrayList<>();;
 
@@ -54,7 +59,7 @@ public class HotelService {
             Hotel retrievedHotel = savedHotel.get();
             boolean hasLanguage = retrievedHotel.getTranslations()
                     .stream()
-                    .anyMatch(translation -> language.equalsIgnoreCase(translation.getLanguage()));
+                    .anyMatch(translation -> languageCode.equalsIgnoreCase(translation.getLanguage()));
             if(hasLanguage) {
                 if (containsReviews && retrievedHotel.getReviews() == null) {
                     retrievedHotel.setReviews(reviewList);
@@ -75,7 +80,7 @@ public class HotelService {
                             if (savedAmenity.isPresent()) {
                                 Amenity existingAmenity = savedAmenity.get();
                                 if (existingAmenity.getTranslations().stream().noneMatch(
-                                        t -> language.equalsIgnoreCase(t.getLanguage())
+                                        t -> languageCode.equalsIgnoreCase(t.getLanguage())
                                 )) {
                                     existingAmenity.getTranslations().add(amenity.getTranslations().get(0));
                                 }
@@ -110,7 +115,7 @@ public class HotelService {
                         if (savedFacility.isPresent()) {
                             Facility existingFacility = savedFacility.get();
                             if (existingFacility.getTranslations().stream().noneMatch(
-                                    t -> language.equalsIgnoreCase(t.getLanguage())
+                                    t -> languageCode.equalsIgnoreCase(t.getLanguage())
                             )) {
                                 existingFacility.getTranslations().add(facility.getTranslations().get(0));
                             }
@@ -170,43 +175,29 @@ public class HotelService {
 
     public Optional<Hotel> getHotelByIdWithTranslations(int hotelId, String language) {
 
-        if (language == null)
-            return hotelRepository.findById(hotelId);
+        Language langEnum = Language.fromString(language);
+        final String languageCode = langEnum.getCode();
 
-        else {
-            final String finalLanguage = language;
+        Optional<Hotel> savedHotel = hotelRepository.findByIdWithTranslationsByLanguage(hotelId, languageCode);
 
-            Optional<Hotel> savedHotel = hotelRepository.findByIdWithTranslationsByLanguage(hotelId, finalLanguage);
+        if (savedHotel.isPresent()) {
             Hotel hotel = savedHotel.get();
-
-            // Filter collections' translations
-            for (Facility facility : hotel.getFacilities()) {
-                Hibernate.initialize(facility.getTranslations());  // Ensure the translations are loaded
-                facility.setTranslations(facility.getTranslations().stream()
-                        .filter(t -> t.getLanguage().equals(finalLanguage))
-                        .collect(Collectors.toList()));
-            }
-
-            hotel.setReviews(hotel.getReviews().stream()
-                    .filter(t -> t.getLanguage().equals(finalLanguage))
-                    .collect(Collectors.toList()));
-
-            for (Room room : hotel.getRooms()) {
-                Hibernate.initialize(room.getTranslations());  // Ensure the translations are loaded
-                room.setTranslations(room.getTranslations().stream()
-                        .filter(t -> t.getLanguage().equals(finalLanguage))
-                        .collect(Collectors.toList()));
-
-                for (Amenity amenity : room.getRoomAmenities()) {
-                    Hibernate.initialize(amenity.getTranslations());  // Ensure the translations are loaded
-                    amenity.setTranslations(amenity.getTranslations().stream()
-                            .filter(t -> t.getLanguage().equals(finalLanguage))
-                            .collect(Collectors.toList()));
-                }
-            }
-
-            return savedHotel;
+            filterHotelProperties(hotel, languageCode);
         }
+
+        return savedHotel;
+    }
+
+    public Optional<Hotel> getHotelByNameWithTranslationsByLanguage(String hotelName, String language) {
+
+        Language langEnum = Language.fromString(language);
+        final String languageCode = langEnum.getCode();
+
+        Optional<Hotel> savedHotel = hotelRepository.findByNameWithTranslationsByLanguage(hotelName, languageCode);
+
+        savedHotel.ifPresent(hotel -> filterHotelProperties(hotel, languageCode));
+
+        return savedHotel;
     }
 
     public List<Review> addHotelReviews(Integer hotelId, List<ReviewDTO> reviewDTOList) {
@@ -229,14 +220,45 @@ public class HotelService {
 
     public List<Review> getHotelReviews(Integer hotelId, String language) {
 
-        List<Review> reviewList;
+        Language langEnum = Language.fromString(language);
+        final String languageCode = langEnum.getCode();
 
-        if (Objects.nonNull(language))
-            reviewList = hotelRepository.findReviewsByHotelIdAndLanguage(hotelId, language);
-        else
-            reviewList = hotelRepository.findReviewsByHotelId(hotelId);
+        return hotelRepository.findReviewsByHotelIdAndLanguage(hotelId, languageCode);
+    }
 
-        return reviewList;
+    private void filterHotelProperties(Hotel hotel, String language) {
 
+        hotel.setFacilities(hotel.getFacilities().stream()
+                .filter(facility -> {
+                    Hibernate.initialize(facility.getTranslations());
+
+                    // Filter translations by language
+                    List<FacilityTranslation> filteredTranslations = facility.getTranslations().stream()
+                            .filter(t -> t.getLanguage().equals(language))
+                            .collect(Collectors.toList());
+
+                    facility.setTranslations(filteredTranslations); // Update translations
+
+                    return !filteredTranslations.isEmpty(); // Only keep facilities that have translations
+                })
+                .collect(Collectors.toList()));
+
+        hotel.setReviews(hotel.getReviews().stream()
+                .filter(t -> t.getLanguage().equals(language))
+                .collect(Collectors.toList()));
+
+        for (Room room : hotel.getRooms()) {
+            Hibernate.initialize(room.getTranslations());
+            room.setTranslations(room.getTranslations().stream()
+                    .filter(t -> t.getLanguage().equals(language))
+                    .collect(Collectors.toList()));
+
+            for (Amenity amenity : room.getRoomAmenities()) {
+                Hibernate.initialize(amenity.getTranslations());
+                amenity.setTranslations(amenity.getTranslations().stream()
+                        .filter(t -> t.getLanguage().equals(language))
+                        .collect(Collectors.toList()));
+            }
+        }
     }
 }

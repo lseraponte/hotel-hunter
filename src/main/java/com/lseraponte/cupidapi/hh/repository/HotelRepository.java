@@ -15,9 +15,11 @@ public interface HotelRepository extends JpaRepository<Hotel, Integer> {
 
     Optional<Hotel> findByHotelId(int hotelId);
 
-    // Fetch an Amenity along with its translations filtered by language
     @Query("SELECT h FROM Hotel h LEFT JOIN FETCH h.translations t WHERE h.hotelId = :hotelId AND t.language = :language")
     Optional<Hotel> findByIdWithTranslationsByLanguage(@Param("hotelId") Integer hotelId, @Param("language") String language);
+
+    @Query("SELECT h FROM Hotel h LEFT JOIN FETCH h.translations t WHERE t.hotelName = :hotelName AND t.language = :language")
+    Optional<Hotel> findByNameWithTranslationsByLanguage(@Param("hotelName") String hotelName, @Param("language") String language);
 
     @Query("SELECT r FROM Hotel h JOIN h.reviews r WHERE h.hotelId = :hotelId")
     List<Review> findReviewsByHotelId(@Param("hotelId") Integer hotelId);

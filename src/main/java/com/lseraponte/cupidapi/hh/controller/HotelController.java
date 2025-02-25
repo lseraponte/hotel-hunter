@@ -58,10 +58,18 @@ public class HotelController {
         return ResponseEntity.ok(savedHotel);
     }
 
-    @GetMapping("/{hotelId}")
-    public ResponseEntity<Hotel> getHotel(@PathVariable int hotelId,
+    @GetMapping("/search/identifier/{hotelId}")
+    public ResponseEntity<Hotel> getHotelById(@PathVariable int hotelId,
                                           @RequestParam(required = false) String language) {
         return hotelService.getHotelByIdWithTranslations(hotelId, language)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search/name/{hotelName}")
+    public ResponseEntity<Hotel> getHotelByName(@PathVariable String hotelName,
+                                          @RequestParam(required = false) String language) {
+        return hotelService.getHotelByNameWithTranslationsByLanguage(hotelName, language)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
