@@ -7,12 +7,15 @@ import com.lseraponte.cupidapi.hh.model.Hotel;
 import com.lseraponte.cupidapi.hh.model.Review;
 import com.lseraponte.cupidapi.hh.service.CupidApiService;
 import com.lseraponte.cupidapi.hh.service.HotelService;
+import com.lseraponte.cupidapi.hh.service.HotelServiceImproved;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +32,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class HotelController {
 
+    private final HotelServiceImproved hotelServiceImproved;
     private final HotelService hotelService;
     private final CupidApiService cupidApiService;
 
@@ -52,7 +56,7 @@ public class HotelController {
                                            @RequestBody(required = false) List<ReviewDTO> reviewDTOList,
                                            @RequestParam String language) {
 
-        Hotel savedHotel = hotelService.saveHotelWithTranslation(hotelDTO, language, reviewDTOList);
+        Hotel savedHotel = hotelServiceImproved.saveHotelWithTranslation(hotelDTO, language, reviewDTOList);
         return ResponseEntity.ok(savedHotel);
     }
 
@@ -79,6 +83,19 @@ public class HotelController {
                 .filter(list -> !list.isEmpty())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+//    @PutMapping("/update/{hotelId}")
+//    public ResponseEntity<Hotel> updateHotelById(@PathVariable Integer hotelId, @RequestBody HotelDTO hotelDTO,
+//                                                 @RequestParam(required = false) String language) {
+//        Hotel updatedHotel = hotelService.updateHotelByIdAndLanguage(hotelId, hotelDTO, language);
+//        return ResponseEntity.ok(updatedHotel); // 200 OK with the updated hotel object
+//    }
+
+    @DeleteMapping("/delete/{hotelId}")
+    public ResponseEntity<Void> deleteHotelById(@PathVariable Integer hotelId) {
+        hotelService.deleteHotelById(hotelId);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/reviews")

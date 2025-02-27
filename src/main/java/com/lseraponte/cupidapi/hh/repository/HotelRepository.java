@@ -3,7 +3,6 @@ package com.lseraponte.cupidapi.hh.repository;
 import com.lseraponte.cupidapi.hh.dto.HotelWithTranslationDTO;
 import com.lseraponte.cupidapi.hh.model.Hotel;
 import com.lseraponte.cupidapi.hh.model.Review;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,6 +34,8 @@ public interface HotelRepository extends JpaRepository<Hotel, Integer> {
             "WHERE h.address.city = :city " +
             "AND t.language = :language")
     Optional<List<HotelWithTranslationDTO>> findHotelsWithTranslationsByCityAndLanguage(@Param("city") String city, @Param("language") String language);
+
+    void deleteById(Integer hotelId);
 
     @Query("SELECT r FROM Hotel h JOIN h.reviews r WHERE h.hotelId = :hotelId")
     List<Review> findReviewsByHotelId(@Param("hotelId") Integer hotelId);

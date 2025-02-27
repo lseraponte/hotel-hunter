@@ -27,7 +27,7 @@ public class Amenity {
 
     @Id
     @Column(name = "amenity_id")
-    private int amenityId;
+    private Integer amenityId;
 
     @Column(name = "sort")
     private int sort;
@@ -37,7 +37,7 @@ public class Amenity {
     private List<AmenityTranslation> translations;
 
     // Convert from DTO to Entity
-    public static Amenity fromDTO(RoomDTO.AmenityDTO dto, Room room, String language) {
+    public static Amenity fromDTO(RoomDTO.AmenityDTO dto, String language) {
 
         Amenity amenity = Amenity.builder()
                 .amenityId(dto.amenitiesId())

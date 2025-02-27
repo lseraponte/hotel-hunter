@@ -33,7 +33,7 @@ public class Room {
 
     @Id
     @Column(name = "room_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "room_size_square")
     private int roomSizeSquare;
@@ -90,11 +90,11 @@ public class Room {
         room.setTranslations(List.of(translation));
 
         room.setBedTypes(Optional.ofNullable(dto.bedTypes()).orElse(Collections.emptyList()).stream()
-                .map(bedTypeDTO -> BedType.fromDTO(bedTypeDTO, room, language)).collect(Collectors.toList()));
+                .map(bedTypeDTO -> BedType.fromDTO(bedTypeDTO, language)).collect(Collectors.toList()));
         room.setRoomAmenities(Optional.ofNullable(dto.roomAmenities()).orElse(Collections.emptyList()).stream()
-                .map(amenityDTO -> Amenity.fromDTO(amenityDTO, room, language)).collect(Collectors.toList()));
+                .map(amenityDTO -> Amenity.fromDTO(amenityDTO, language)).collect(Collectors.toList()));
         room.setPhotos(Optional.ofNullable(dto.photos()).orElse(Collections.emptyList()).stream()
-                .map(photoDTO -> Photo.fromDTO(photoDTO)).collect(Collectors.toList()));
+                .map(Photo::fromDTO).collect(Collectors.toList()));
 
         return room;
     }

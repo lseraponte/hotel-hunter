@@ -19,7 +19,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -207,6 +210,13 @@ public class HotelService {
         final String languageCode = langEnum.getCode();
 
         return hotelRepository.findHotelsWithTranslationsByCityAndLanguage(city, languageCode);
+    }
+
+    public void deleteHotelById(Integer hotelId) {
+        if (!hotelRepository.existsById(hotelId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hotel not found");
+        }
+        hotelRepository.deleteById(hotelId);
     }
 
     public List<Review> addHotelReviews(Integer hotelId, List<ReviewDTO> reviewDTOList) {

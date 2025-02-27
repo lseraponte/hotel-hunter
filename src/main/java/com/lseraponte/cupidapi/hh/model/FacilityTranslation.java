@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.lseraponte.cupidapi.hh.dto.FacilityDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,4 +33,11 @@ public class FacilityTranslation {
     @Column(name = "language", nullable = false)
     private String language;
 
+    public static FacilityTranslation fromDTO(FacilityDTO dto, String language) {
+
+        return FacilityTranslation.builder()
+                .facilityName(dto.name())
+                .language(language)
+                .build();
+    }
 }

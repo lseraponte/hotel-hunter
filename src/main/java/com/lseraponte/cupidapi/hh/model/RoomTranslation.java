@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,4 +38,13 @@ public class RoomTranslation {
     @Column(name = "language", nullable = false)
     private String language;
 
+    public static RoomTranslation fromDTO(RoomDTO dto, String language) {
+
+        return RoomTranslation.builder()
+                .roomName(dto.roomName())
+                .description(dto.description())
+                .language(language)
+                .build();
+
+    }
 }

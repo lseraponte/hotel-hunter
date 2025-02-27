@@ -40,7 +40,7 @@ public class BedType {
     private List<BedTypeTranslation> translations;
 
     // Convert from DTO to Entity
-    public static BedType fromDTO(RoomDTO.BedTypeDTO dto, Room room, String language) {
+    public static BedType fromDTO(RoomDTO.BedTypeDTO dto, String language) {
 
         BedType bedType = BedType.builder()
                 .quantity(dto.quantity())

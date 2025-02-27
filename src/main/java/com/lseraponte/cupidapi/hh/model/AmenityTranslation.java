@@ -1,20 +1,19 @@
 package com.lseraponte.cupidapi.hh.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
+import java.util.List;
 
 @Entity
 @Table(name = "amenity_translations")
@@ -36,4 +35,11 @@ public class AmenityTranslation {
     @Column(name = "language", nullable = false)
     private String language;
 
+    public static AmenityTranslation fromDTO(RoomDTO.AmenityDTO dto, String language) {
+
+        return AmenityTranslation.builder()
+                .name(dto.name())
+                .language(language)
+                .build();
+    }
 }

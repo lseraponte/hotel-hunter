@@ -28,10 +28,10 @@ public class HotelStartupService {
         this.hotelService = hotelService;
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void fetchHotelsOnStartup() {
-        List<Integer> hotelIds = loadHotelIdsFromFile("hotel_ids.txt");
-//        List<Integer> hotelIds = loadHotelIdsFromFile("partial_hotel_ids.txt");
+//        List<Integer> hotelIds = loadHotelIdsFromFile("hotel_ids.txt");
+        List<Integer> hotelIds = loadHotelIdsFromFile("partial_hotel_ids.txt");
 
         Flux.fromIterable(hotelIds)
                 .concatMap(hotelId -> {
@@ -40,7 +40,7 @@ public class HotelStartupService {
                     return cupidApiService.getHotelById(hotelId)
                             .onErrorResume(e -> {
                                 logger.error("Failed to fetch hotel ID: {}. Skipping...", hotelId, e);
-                                return Mono.empty(); // Stop processing for this hotel
+                                return Mono.empty();
                             })
                             .zipWhen(h -> cupidApiService.getHotelByIdWithTranslation(hotelId, "fr"))
                             .zipWhen(h -> cupidApiService.getHotelByIdWithTranslation(hotelId, "es"))
@@ -68,8 +68,8 @@ public class HotelStartupService {
         try {
             Path path = new ClassPathResource(fileName).getFile().toPath();
             return Files.readAllLines(path).stream()
-                    .filter(line -> !line.trim().isEmpty())  // Ignore empty lines
-                    .map(Integer::parseInt)                  // Convert each line to an integer
+                    .filter(line -> !line.trim().isEmpty())
+                    .map(Integer::parseInt)
                     .collect(Collectors.toList());
         } catch (Exception e) {
             throw new RuntimeException("Failed to load hotel IDs from file", e);
