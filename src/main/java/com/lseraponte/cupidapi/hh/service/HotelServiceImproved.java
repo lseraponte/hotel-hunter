@@ -46,7 +46,7 @@ public class HotelServiceImproved {
     private final PhotoRepository photoRepository;
 
     @Transactional
-    public Hotel saveHotelWithTranslation(HotelDTO hotelDTO, String language, List<ReviewDTO> reviewDTOList) {
+    public Hotel updateHotelWithTranslation(HotelDTO hotelDTO, String language, List<ReviewDTO> reviewDTOList) {
 
         Language langEnum = Language.fromString(language);
         final String languageCode = langEnum.getCode();
@@ -80,213 +80,201 @@ public class HotelServiceImproved {
                 retrievedHotel.setReviews(reviewList);
             }
 
-            if (Objects.nonNull(hotel.getRooms())) {
+            hotel.setFacilities(updateFacilities(hotel, languageCode));
+            hotel.setPhotos(updatePhotos(hotel, languageCode));
+            hotel.setPolicies(updatePolicies(hotel, languageCode));
+            hotel.setRooms(updateRooms(hotel, languageCode));
 
-                List<Room> hotelCurrentRooms = hotel.getRooms();
-                List<Room> retrievedCurrentRooms = retrievedHotel.getRooms();
-                List<Room> updatedRooms = new ArrayList<>();
-                updatedRooms.addAll(retrievedCurrentRooms);
-                for (Room hotelCurrentRoom : hotelCurrentRooms) {
-                    Optional<Room> retrievedCurrentRoomOptional = retrievedCurrentRooms.stream()
-                            .filter(t -> hotelCurrentRoom.getId().equals(t.getId()))
-                            .findFirst();
-
-                    if (retrievedCurrentRoomOptional.isPresent()) {
-                        Room retrievedCurrentRoom = retrievedCurrentRoomOptional.get();
-                        translationUpdated = false;
-
-                        for (int i = 0; i < retrievedCurrentRoom.getTranslations().size(); i++) {
-                            if (languageCode.equals(retrievedCurrentRoom.getTranslations().get(i).getLanguage())) {
-                                retrievedCurrentRoom.getTranslations().set(i,
-                                        roomTranslationValues(hotelCurrentRoom.getTranslations().get(0),
-                                                retrievedCurrentRoom.getTranslations().get(i)));
-                                translationUpdated = true;
-                                break;
-                            }
-                        }
-
-                        if (!translationUpdated)
-                            retrievedCurrentRoom.getTranslations().add(hotelCurrentRoom.getTranslations().get(0));
-                        updatedRooms.add(retrievedCurrentRoom);
-
-                        List<Amenity> hotelCurrentAmenities = hotelCurrentRoom.getRoomAmenities();
-                        List<Amenity> retrievedCurrentAmenities = retrievedCurrentRoom.getRoomAmenities();
-                        List<Amenity> updatedAmenities = new ArrayList<>();
-                        updatedAmenities.addAll(retrievedCurrentAmenities);
-                        for (Amenity hotelCurrentAmenity : hotelCurrentAmenities) {
-
-                            Optional<Amenity> retrievedCurrentAmenityOptional = retrievedCurrentAmenities.stream()
-                                    .filter(t -> hotelCurrentAmenity.getAmenityId().equals(t.getAmenityId()))
-                                    .findFirst();
-
-                            if (retrievedCurrentAmenityOptional.isPresent()) {
-                                Amenity retrievedCurrentAmenity = retrievedCurrentAmenityOptional.get();
-                                translationUpdated = false;
-                                for (int i = 0; i < retrievedCurrentAmenity.getTranslations().size(); i++) {
-                                    if (languageCode.equals(retrievedCurrentAmenity.getTranslations().get(i).getLanguage())) {
-                                        retrievedCurrentAmenity.getTranslations().set(i,
-                                                amenityTranslationValues(hotelCurrentAmenity.getTranslations().get(0),
-                                                        retrievedCurrentAmenity.getTranslations().get(i)));
-                                        translationUpdated = true;
-                                        break;
-                                    }
-                                }
-                                if (!translationUpdated)
-                                    retrievedCurrentAmenity.getTranslations().add(hotelCurrentAmenity.getTranslations().get(0));
-                            }
-                            else {
-                                updatedAmenities.add(amenityRepository.save(hotelCurrentAmenity));
-                            }
-                        }
-                        hotelCurrentRoom.setRoomAmenities(updatedAmenities);
-
-                        List<Photo> hotelCurrentPhotos = hotelCurrentRoom.getPhotos();
-                        List<Photo> retrievedCurrentPhotos = retrievedCurrentRoom.getPhotos();
-                        List<Photo> updatedPhotos = new ArrayList<>();
-                        updatedPhotos.addAll(retrievedCurrentPhotos);
-                        for (Photo hotelCurrentPhoto : hotelCurrentPhotos) {
-                            Optional<Photo> retrievedCurrentPhotoOptional = retrievedCurrentPhotos.stream()
-                                    .filter(t -> hotelCurrentPhoto.getUrl().equals(t.getUrl()))
-                                    .findFirst();
-                            if (retrievedCurrentPhotoOptional.isEmpty()) {
-                                updatedPhotos.add(photoRepository.save(hotelCurrentPhoto));
-                            }
-                        }
-                        hotelCurrentRoom.setPhotos(updatedPhotos);
-                    }
-                    else {
-                        updatedRooms.add(roomRepository.save(hotelCurrentRoom));
-                    }
-                }
-                hotel.setRooms(updatedRooms);
-            }
-
-            List<Facility> hotelFacilities = hotel.getFacilities();
-            List<Facility> retrievedFacilities = retrievedHotel.getFacilities();
-            if (Objects.nonNull(hotelFacilities) && !hotelFacilities.isEmpty()) {
-                // Remove facilities that are not present in the incoming request
-                List<Facility> filteredFacilities = retrievedFacilities.stream()
-                        .filter(retrievedFacility -> hotelFacilities.stream()
-                                .anyMatch(hotelFacility -> hotelFacility.getFacilityId().equals(retrievedFacility.getFacilityId())))
-                        .collect(Collectors.toList());
-
-                // Add or update facilities
-                for (Facility hotelCurrentFacility : hotelFacilities) {
-                    Optional<Facility> retrievedCurrentFacilityOptional = filteredFacilities.stream()
-                            .filter(t -> hotelCurrentFacility.getFacilityId().equals(t.getFacilityId()))
-                            .findFirst();
-
-                    if (retrievedCurrentFacilityOptional.isEmpty()) {
-                        filteredFacilities.add(facilityRepository.save(hotelCurrentFacility));
-                    } else {
-                        Facility existingFacility = retrievedCurrentFacilityOptional.get();
-                        translationUpdated = false;
-
-                        for (int i = 0; i < existingFacility.getTranslations().size(); i++) {
-                            if (languageCode.equals(existingFacility.getTranslations().get(i).getLanguage())) {
-                                existingFacility.getTranslations().set(i,
-                                        facilityTranslationValues(hotelCurrentFacility.getTranslations().get(0),
-                                                existingFacility.getTranslations().get(i)));
-                                translationUpdated = true;
-                                break;
-                            }
-                        }
-
-                        if (!translationUpdated) {
-                            existingFacility.getTranslations().add(hotelCurrentFacility.getTranslations().get(0));
-                        }
-                    }
-                }
-                hotel.setFacilities(filteredFacilities);
-            }
-
-            List<Photo> hotelPhotos = hotel.getPhotos();
-            List<Photo> retrievedPhotos = retrievedHotel.getPhotos();
-            if (Objects.nonNull(hotelPhotos) && !hotelPhotos.isEmpty()) {
-                // Remove photos that are not present in the incoming request
-                List<Photo> filteredPhotos = retrievedPhotos.stream()
-                        .filter(retrievedPhoto -> hotelPhotos.stream()
-                                .anyMatch(hotelPhoto -> hotelPhoto.getUrl().equals(retrievedPhoto.getUrl())))
-                        .collect(Collectors.toList());
-
-                // Add or update photos
-                for (Photo hotelCurrentPhoto : hotelPhotos) {
-                    Optional<Photo> retrievedCurrentPhotoOptional = filteredPhotos.stream()
-                            .filter(t -> hotelCurrentPhoto.getUrl().equals(t.getUrl()))
-                            .findFirst();
-
-                    if (retrievedCurrentPhotoOptional.isEmpty()) {
-                        filteredPhotos.add(photoRepository.save(hotelCurrentPhoto));
-                    } else {
-                        Photo existingPhoto = photoValues(hotelCurrentPhoto, retrievedCurrentPhotoOptional.get()); // Example update
-                    }
-                }
-
-                hotel.setPhotos(filteredPhotos);
-            }
-
-            List<Policy> hotelPolicies = hotel.getPolicies();
-            List<Policy> retrievedPolicies = retrievedHotel.getPolicies();
-            if (Objects.nonNull(hotelPolicies) && !hotelPolicies.isEmpty()) {
-                // Remove policies that are not present in the incoming request
-                List<Policy> filteredPolicies = retrievedPolicies.stream()
-                        .filter(retrievedPolicy -> hotelPolicies.stream()
-                                .anyMatch(hotelPolicy -> hotelPolicy.getPolicyType().equals(retrievedPolicy.getPolicyType())))
-                        .collect(Collectors.toList());
-                // Add or update policies
-                for (Policy hotelCurrentPolicy : hotelPolicies) {
-                    Optional<Policy> retrievedCurrentPolicyOptional = filteredPolicies.stream()
-                            .filter(t -> hotelCurrentPolicy.getPolicyType().equals(t.getPolicyType()))
-                            .findFirst();
-
-                    if (retrievedCurrentPolicyOptional.isEmpty()) {
-                        filteredPolicies.add(policyRepository.save(hotelCurrentPolicy));
-                    } else {
-                        Policy existingPolicy = retrievedCurrentPolicyOptional.get();
-                        existingPolicy.setDescription(hotelCurrentPolicy.getDescription()); // Example update
-                    }
-                }
-
-                hotel.setPolicies(filteredPolicies);
-            }
-
-
-
-        } else {
-            for (Room room : hotel.getRooms()) {
-                List<Amenity> updatedAmenities = new ArrayList<>();
-                for (Amenity amenity : room.getRoomAmenities()) {
-                    Amenity existingAmenity = amenityRepository.findByAmenityId(amenity.getAmenityId())
-                            .orElseGet(() -> amenityRepository.save(amenity));
-                    updatedAmenities.add(existingAmenity);
-                }
-                room.setRoomAmenities(updatedAmenities);
-            }
-
-            List<Facility> updatedFacilities = new ArrayList<>();
-            for (Facility facility : hotel.getFacilities()) {
-                Facility existingFacility = facilityRepository.findByFacilityId(facility.getFacilityId())
-                        .orElseGet(() -> facilityRepository.save(facility));
-                updatedFacilities.add(existingFacility);
-            }
-            hotel.setFacilities(updatedFacilities);
         }
-
-        if (Objects.nonNull(hotel.getPolicies()) && !hotel.getPolicies().isEmpty()) {
-            List<Policy> updatedPolicies = new ArrayList<>();
-            for (Policy policy : hotel.getPolicies()) {
-                Optional<Policy> savedPolicy = policyRepository.findByPolicyType(policy.getPolicyType());
-                updatedPolicies.add(savedPolicy.orElse(policy));
-            }
-            hotel.setPolicies(updatedPolicies);
-        }
-
-        if (containsReviews) {
-            hotel.setReviews(reviewList);
-        }
-
         return hotelRepository.save(hotel);
     }
 
+    private List<Room> updateRooms(Hotel hotel, String languageCode) {
 
+        List<Room> hotelCurrentRooms = hotel.getRooms();
+        List<Room> retrievedCurrentRooms = hotelRepository.findRoomByHotelId(hotel.getHotelId());
+
+        List<Room> filteredRooms = retrievedCurrentRooms.stream()
+                .filter(retrievedRoom -> hotelCurrentRooms.stream()
+                        .anyMatch(hotelRoom -> hotelRoom.getId().equals(retrievedRoom.getId())))
+                .collect(Collectors.toList());
+
+        if (Objects.nonNull(hotelCurrentRooms) && !hotelCurrentRooms.isEmpty()) {
+            for (Room hotelCurrentRoom : hotelCurrentRooms) {
+
+                hotelCurrentRoom.setRoomAmenities(updateAmenities(hotelCurrentRoom, languageCode));
+
+                Optional<Room> retrievedCurrentRoomOptional = retrievedCurrentRooms.stream()
+                        .filter(t -> hotelCurrentRoom.getId().equals(t.getId()))
+                        .findFirst();
+
+                if (retrievedCurrentRoomOptional.isEmpty()) {
+                    filteredRooms.add(roomRepository.save(hotelCurrentRoom));
+                } else {
+                    Room existingRoom = retrievedCurrentRoomOptional.get();
+                    boolean translationUpdated = false;
+
+                    for (int i = 0; i < existingRoom.getTranslations().size(); i++) {
+                        if (languageCode.equals(existingRoom.getTranslations().get(i).getLanguage())) {
+                            existingRoom.getTranslations().set(i,
+                                    roomTranslationValues(hotelCurrentRoom.getTranslations().get(0),
+                                            existingRoom.getTranslations().get(i)));
+                            translationUpdated = true;
+                            break;
+                        }
+                    }
+
+                    if (!translationUpdated) {
+                        existingRoom.getTranslations().add(hotelCurrentRoom.getTranslations().get(0));
+                    }
+                }
+            }
+            return filteredRooms;
+        }
+        return null;
+    }
+
+    private List<Amenity> updateAmenities(Room room, String languageCode) {
+
+        List<Amenity> hotelCurrentAmenities = room.getRoomAmenities();
+        List<Amenity> retrievedCurrentAmenities = roomRepository.findAmenityByRoomId(room.getId());
+
+        List<Amenity> filteredAmenities = retrievedCurrentAmenities.stream()
+                .filter(retrievedAmenity -> hotelCurrentAmenities.stream()
+                        .anyMatch(hotelAmenity -> hotelAmenity.getAmenityId().equals(retrievedAmenity.getAmenityId())))
+                .collect(Collectors.toList());
+
+        if (Objects.nonNull(hotelCurrentAmenities) && !hotelCurrentAmenities.isEmpty()) {
+            for (Amenity hotelCurrentAmenity : hotelCurrentAmenities) {
+
+                Optional<Amenity> retrievedCurrentAmenityOptional = retrievedCurrentAmenities.stream()
+                        .filter(t -> hotelCurrentAmenity.getAmenityId().equals(t.getAmenityId()))
+                        .findFirst();
+
+                if (retrievedCurrentAmenityOptional.isEmpty()) {
+                    filteredAmenities.add(amenityRepository.save(hotelCurrentAmenity));
+                } else {
+                    Amenity existingAmenity = retrievedCurrentAmenityOptional.get();
+                    boolean translationUpdated = false;
+
+                    for (int i = 0; i < existingAmenity.getTranslations().size(); i++) {
+                        if (languageCode.equals(existingAmenity.getTranslations().get(i).getLanguage())) {
+                            existingAmenity.getTranslations().set(i,
+                                    amenityTranslationValues(hotelCurrentAmenity.getTranslations().get(0),
+                                            existingAmenity.getTranslations().get(i)));
+                            translationUpdated = true;
+                            break;
+                        }
+                    }
+                    if (!translationUpdated) {
+                        existingAmenity.getTranslations().add(hotelCurrentAmenity.getTranslations().get(0));
+                    }
+                }
+            }
+            return filteredAmenities;
+        }
+        return null;
+    }
+
+    private List<Facility> updateFacilities(Hotel hotel, String languageCode) {
+
+        List<Facility> hotelFacilities = hotel.getFacilities();
+        List<Facility> retrievedFacilities = hotelRepository.findFacilitiesByHotelId(hotel.getHotelId());
+
+        if (Objects.nonNull(hotelFacilities) && !hotelFacilities.isEmpty()) {
+            // Remove facilities that are not present in the incoming request
+            List<Facility> filteredFacilities = retrievedFacilities.stream()
+                    .filter(retrievedFacility -> hotelFacilities.stream()
+                            .anyMatch(hotelFacility -> hotelFacility.getFacilityId().equals(retrievedFacility.getFacilityId())))
+                    .collect(Collectors.toList());
+
+            // Add or update facilities
+            for (Facility hotelCurrentFacility : hotelFacilities) {
+                Optional<Facility> retrievedCurrentFacilityOptional = filteredFacilities.stream()
+                        .filter(t -> hotelCurrentFacility.getFacilityId().equals(t.getFacilityId()))
+                        .findFirst();
+
+                if (retrievedCurrentFacilityOptional.isEmpty()) {
+                    filteredFacilities.add(facilityRepository.save(hotelCurrentFacility));
+                } else {
+                    Facility existingFacility = retrievedCurrentFacilityOptional.get();
+                    boolean translationUpdated = false;
+
+                    for (int i = 0; i < existingFacility.getTranslations().size(); i++) {
+                        if (languageCode.equals(existingFacility.getTranslations().get(i).getLanguage())) {
+                            existingFacility.getTranslations().set(i,
+                                    facilityTranslationValues(hotelCurrentFacility.getTranslations().get(0),
+                                            existingFacility.getTranslations().get(i)));
+                            translationUpdated = true;
+                            break;
+                        }
+                    }
+
+                    if (!translationUpdated) {
+                        existingFacility.getTranslations().add(hotelCurrentFacility.getTranslations().get(0));
+                    }
+                }
+            }
+            return filteredFacilities;
+        }
+        return null;
+    }
+
+    private List<Photo> updatePhotos(Hotel hotel, String languageCode) {
+
+        List<Photo> hotelPhotos = hotel.getPhotos();
+        List<Photo> retrievedPhotos = hotelRepository.findPhotosByHotelId(hotel.getHotelId());
+
+        if (Objects.nonNull(hotelPhotos) && !hotelPhotos.isEmpty()) {
+
+            List<Photo> filteredPhotos = retrievedPhotos.stream()
+                    .filter(retrievedPhoto -> hotelPhotos.stream()
+                            .anyMatch(hotelPhoto -> hotelPhoto.getUrl().equals(retrievedPhoto.getUrl())))
+                    .collect(Collectors.toList());
+
+            for (Photo hotelCurrentPhoto : hotelPhotos) {
+                Optional<Photo> retrievedCurrentPhotoOptional = filteredPhotos.stream()
+                        .filter(t -> hotelCurrentPhoto.getUrl().equals(t.getUrl()))
+                        .findFirst();
+
+                if (retrievedCurrentPhotoOptional.isEmpty()) {
+                    filteredPhotos.add(photoRepository.save(hotelCurrentPhoto));
+                } else {
+                    Photo existingPhoto = photoValues(hotelCurrentPhoto, retrievedCurrentPhotoOptional.get()); // Example update
+                }
+            }
+
+            return(filteredPhotos);
+        }
+        return null;
+    }
+
+    private List<Policy> updatePolicies(Hotel hotel, String languageCode) {
+
+        List<Policy> hotelPolicies = hotel.getPolicies();
+        List<Policy> retrievedPolicies = hotelRepository.findPolicyByHotelId(hotel.getHotelId());
+
+        if (Objects.nonNull(hotelPolicies) && !hotelPolicies.isEmpty()) {
+
+            List<Policy> filteredPolicies = retrievedPolicies.stream()
+                    .filter(retrievedPolicy -> hotelPolicies.stream()
+                            .anyMatch(hotelPolicy -> hotelPolicy.getPolicyType().equals(retrievedPolicy.getPolicyType())))
+                    .collect(Collectors.toList());
+
+            for (Policy hotelCurrentPolicy : hotelPolicies) {
+                Optional<Policy> retrievedCurrentPolicyOptional = filteredPolicies.stream()
+                        .filter(t -> hotelCurrentPolicy.getPolicyType().equals(t.getPolicyType()))
+                        .findFirst();
+
+                if (retrievedCurrentPolicyOptional.isEmpty()) {
+                    filteredPolicies.add(policyRepository.save(hotelCurrentPolicy));
+                } else {
+                    Policy existingPolicy = retrievedCurrentPolicyOptional.get();
+                    existingPolicy.setDescription(hotelCurrentPolicy.getDescription());
+                }
+            }
+            return filteredPolicies;
+        }
+        return null;
+    }
 }

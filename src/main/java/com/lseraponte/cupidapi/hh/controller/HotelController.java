@@ -56,7 +56,7 @@ public class HotelController {
                                            @RequestBody(required = false) List<ReviewDTO> reviewDTOList,
                                            @RequestParam String language) {
 
-        Hotel savedHotel = hotelServiceImproved.saveHotelWithTranslation(hotelDTO, language, reviewDTOList);
+        Hotel savedHotel = hotelService.saveHotelWithTranslation(hotelDTO, language, reviewDTOList);
         return ResponseEntity.ok(savedHotel);
     }
 
@@ -85,12 +85,13 @@ public class HotelController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-//    @PutMapping("/update/{hotelId}")
-//    public ResponseEntity<Hotel> updateHotelById(@PathVariable Integer hotelId, @RequestBody HotelDTO hotelDTO,
-//                                                 @RequestParam(required = false) String language) {
-//        Hotel updatedHotel = hotelService.updateHotelByIdAndLanguage(hotelId, hotelDTO, language);
-//        return ResponseEntity.ok(updatedHotel); // 200 OK with the updated hotel object
-//    }
+    @PutMapping("/update")
+    public ResponseEntity<Hotel> updateHotelById(@RequestBody HotelDTO hotelDTO,
+                                                 @RequestBody(required = false) List<ReviewDTO> reviewDTOList,
+                                                 @RequestParam(required = false) String language) {
+        Hotel updatedHotel = hotelService.updateHotel(hotelDTO, reviewDTOList, language);
+        return ResponseEntity.ok(updatedHotel); // 200 OK with the updated hotel object
+    }
 
     @DeleteMapping("/delete/{hotelId}")
     public ResponseEntity<Void> deleteHotelById(@PathVariable Integer hotelId) {

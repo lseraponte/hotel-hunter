@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HotelService {
 
+    private final HotelServiceImproved hotelServiceImproved;
     private final HotelRepository hotelRepository;
     private final FacilityRepository facilityRepository;
     private final AmenityRepository amenityRepository;
@@ -175,6 +176,15 @@ public class HotelService {
             hotel.setReviews(reviewList);
 
         return hotelRepository.save(hotel);
+    }
+
+    public Hotel updateHotel (HotelDTO hotelDTO, List<ReviewDTO> reviewDTOList, String language) {
+
+        Language langEnum = Language.fromString(language);
+        final String languageCode = langEnum.getCode();
+
+        return hotelServiceImproved.updateHotelWithTranslation(hotelDTO, languageCode, reviewDTOList);
+
     }
 
     public Optional<Hotel> getHotelByIdWithTranslations(int hotelId, String language) {
