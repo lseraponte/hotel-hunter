@@ -1,21 +1,24 @@
 package com.lseraponte.cupidapi.hh.service;
 
-import static com.lseraponte.cupidapi.hh.util.TranslationsUtil.hotelTranslationValues;
-import static com.lseraponte.cupidapi.hh.util.TranslationsUtil.roomTranslationValues;
-import static com.lseraponte.cupidapi.hh.util.TranslationsUtil.amenityTranslationValues;
-import static com.lseraponte.cupidapi.hh.util.TranslationsUtil.facilityTranslationValues;
+import static com.lseraponte.cupidapi.hh.util.ClassMergingUtil.hotelTranslationValues;
+import static com.lseraponte.cupidapi.hh.util.ClassMergingUtil.roomTranslationValues;
+import static com.lseraponte.cupidapi.hh.util.ClassMergingUtil.amenityTranslationValues;
+import static com.lseraponte.cupidapi.hh.util.ClassMergingUtil.facilityTranslationValues;
+import static com.lseraponte.cupidapi.hh.util.ClassMergingUtil.photoValues;
 
 import com.lseraponte.cupidapi.hh.dto.HotelDTO;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import com.lseraponte.cupidapi.hh.model.Amenity;
 import com.lseraponte.cupidapi.hh.model.Facility;
 import com.lseraponte.cupidapi.hh.model.Hotel;
+import com.lseraponte.cupidapi.hh.model.Photo;
 import com.lseraponte.cupidapi.hh.model.Policy;
 import com.lseraponte.cupidapi.hh.model.Review;
 import com.lseraponte.cupidapi.hh.model.Room;
 import com.lseraponte.cupidapi.hh.repository.AmenityRepository;
 import com.lseraponte.cupidapi.hh.repository.FacilityRepository;
 import com.lseraponte.cupidapi.hh.repository.HotelRepository;
+import com.lseraponte.cupidapi.hh.repository.PhotoRepository;
 import com.lseraponte.cupidapi.hh.repository.PolicyRepository;
 import com.lseraponte.cupidapi.hh.repository.RoomRepository;
 import com.lseraponte.cupidapi.hh.util.Language;
@@ -25,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,6 +43,7 @@ public class HotelServiceImproved {
     private final FacilityRepository facilityRepository;
     private final AmenityRepository amenityRepository;
     private final PolicyRepository policyRepository;
+    private final PhotoRepository photoRepository;
 
     @Transactional
     public Hotel saveHotelWithTranslation(HotelDTO hotelDTO, String language, List<ReviewDTO> reviewDTOList) {
@@ -50,7 +53,8 @@ public class HotelServiceImproved {
 
         Hotel hotel = Hotel.fromDTO(hotelDTO, languageCode);
         boolean containsReviews = Objects.nonNull(reviewDTOList);
-        List<Review> reviewList = containsReviews ? reviewDTOList.stream().map(Review::fromDTO).collect(Collectors.toList()) : new ArrayList<>();
+        List<Review> reviewList = containsReviews ? reviewDTOList.stream().map(Review::fromDTO)
+                .collect(Collectors.toList()) : new ArrayList<>();
 
         Optional<Hotel> savedHotel = hotelRepository.findById(hotel.getHotelId());
         if (savedHotel.isPresent()) {
@@ -80,15 +84,9 @@ public class HotelServiceImproved {
 
                 List<Room> hotelCurrentRooms = hotel.getRooms();
                 List<Room> retrievedCurrentRooms = retrievedHotel.getRooms();
-
-                // Removing Rooms to be deleted.
-                retrievedCurrentRooms = retrievedCurrentRooms.stream()
-                        .filter(retrievedRoom ->
-                                hotelCurrentRooms.stream()
-                                        .anyMatch(hotelRoom -> hotelRoom.getId().equals(retrievedRoom.getId())))
-                        .collect(Collectors.toList());
-
                 List<Room> updatedRooms = new ArrayList<>();
+                updatedRooms.addAll(retrievedCurrentRooms);
+                updatedRooms.addAll(retrievedCurrentRooms);
                 for (Room hotelCurrentRoom : hotelCurrentRooms) {
                     Optional<Room> retrievedCurrentRoomOptional = retrievedCurrentRooms.stream()
                             .filter(t -> hotelCurrentRoom.getId().equals(t.getId()))
@@ -114,14 +112,8 @@ public class HotelServiceImproved {
 
                         List<Amenity> hotelCurrentAmenities = hotelCurrentRoom.getRoomAmenities();
                         List<Amenity> retrievedCurrentAmenities = retrievedCurrentRoom.getRoomAmenities();
-
-                        retrievedCurrentAmenities = retrievedCurrentAmenities.stream()
-                                .filter(retrievedAmenity ->
-                                        hotelCurrentAmenities.stream()
-                                                .anyMatch(hotelAmenity -> hotelAmenity.getAmenityId().equals(retrievedAmenity.getAmenityId())))
-                                .collect(Collectors.toList());
-
                         List<Amenity> updatedAmenities = new ArrayList<>();
+                        updatedAmenities.addAll(retrievedCurrentAmenities);
                         for (Amenity hotelCurrentAmenity : hotelCurrentAmenities) {
 
                             Optional<Amenity> retrievedCurrentAmenityOptional = retrievedCurrentAmenities.stream()
@@ -142,13 +134,26 @@ public class HotelServiceImproved {
                                 }
                                 if (!translationUpdated)
                                     retrievedCurrentAmenity.getTranslations().add(hotelCurrentAmenity.getTranslations().get(0));
-                                updatedAmenities.add(retrievedCurrentAmenity);
                             }
                             else {
                                 updatedAmenities.add(amenityRepository.save(hotelCurrentAmenity));
                             }
                         }
                         hotelCurrentRoom.setRoomAmenities(updatedAmenities);
+
+                        List<Photo> hotelCurrentPhotos = hotelCurrentRoom.getPhotos();
+                        List<Photo> retrievedCurrentPhotos = retrievedCurrentRoom.getPhotos();
+                        List<Photo> updatedPhotos = new ArrayList<>();
+                        updatedPhotos.addAll(retrievedCurrentPhotos);
+                        for (Photo hotelCurrentPhoto : hotelCurrentPhotos) {
+                            Optional<Photo> retrievedCurrentPhotoOptional = retrievedCurrentPhotos.stream()
+                                    .filter(t -> hotelCurrentPhoto.getUrl().equals(t.getUrl()))
+                                    .findFirst();
+                            if (retrievedCurrentPhotoOptional.isEmpty()) {
+                                updatedPhotos.add(photoRepository.save(hotelCurrentPhoto));
+                            }
+                        }
+                        hotelCurrentRoom.setPhotos(updatedPhotos);
                     }
                     else {
                         updatedRooms.add(roomRepository.save(hotelCurrentRoom));
@@ -160,6 +165,7 @@ public class HotelServiceImproved {
             List<Facility> hotelFacilities = hotel.getFacilities();
             List<Facility> retrievedFacilities = retrievedHotel.getFacilities();
             List<Facility> updatedFacilities = new ArrayList<>();
+            updatedFacilities.addAll(retrievedFacilities);
             if (Objects.nonNull(hotelFacilities) && !hotelFacilities.isEmpty()) {
                 for (Facility hotelCurrentFacility : hotelFacilities) {
 
@@ -183,13 +189,52 @@ public class HotelServiceImproved {
 
                         if (!translationUpdated)
                             retrievedCurrentFacility.getTranslations().add(hotelCurrentFacility.getTranslations().get(0));
-                        updatedFacilities.add(retrievedCurrentFacility);
+//                        updatedFacilities.add(retrievedCurrentFacility);
                     } else {
                         updatedFacilities.add(facilityRepository.save(hotelCurrentFacility));
                     }
                 }
-                hotel.setFacilities(updatedFacilities);
             }
+            hotel.setFacilities(updatedFacilities);
+
+            List<Photo> hotelPhotos = hotel.getPhotos();
+            List<Photo> retrievedPhotos = retrievedHotel.getPhotos();
+            List<Photo> updatedPhotos = new ArrayList<>();
+            updatedPhotos.addAll(retrievedPhotos);
+            if (Objects.nonNull(hotelPhotos) && !hotelPhotos.isEmpty()) {
+
+                retrievedPhotos = retrievedPhotos.stream()
+                        .filter(retirevedPhoto ->
+                                hotelPhotos.stream()
+                                        .anyMatch(hotelPhoto -> hotelPhoto.getUrl().equals(retirevedPhoto.getUrl())))
+                        .collect(Collectors.toList());
+
+                for (Photo hotelCurrentPhoto : hotelPhotos) {
+                    Optional<Photo> retrievedCurrentPhotoOptional = retrievedPhotos.stream()
+                            .filter(t -> hotelCurrentPhoto.getUrl().equals(t.getUrl()))
+                            .findFirst();
+                    if (retrievedCurrentPhotoOptional.isEmpty()) {
+                        updatedPhotos.add(photoRepository.save(hotelCurrentPhoto));
+                    }
+                }
+            }
+            hotel.setPhotos(updatedPhotos);
+
+            List<Policy> hotelPolicies = hotel.getPolicies();
+            List<Policy> retrievedPolicies = retrievedHotel.getPolicies();
+            List<Policy> updatedPolicies = new ArrayList<>();
+            updatedPolicies.addAll(retrievedPolicies);
+            if (Objects.nonNull(hotelPolicies) && !hotelPolicies.isEmpty()) {
+                for (Policy hotelCurrentPolicy : hotelPolicies) {
+                    Optional<Policy> retrievedCurrentPolicyOptional = retrievedPolicies.stream()
+                            .filter(t -> hotelCurrentPolicy.getPolicyType().equals(t.getPolicyType()))
+                            .findFirst();
+                    if (retrievedCurrentPolicyOptional.isEmpty()) {
+                        updatedPolicies.add(policyRepository.save(hotelCurrentPolicy));
+                    }
+                }
+            }
+            hotel.setPolicies(updatedPolicies);
 
         } else {
             for (Room room : hotel.getRooms()) {
