@@ -103,6 +103,7 @@ public class HotelServiceImproved {
             for (Room hotelCurrentRoom : hotelCurrentRooms) {
 
                 hotelCurrentRoom.setRoomAmenities(updateAmenities(hotelCurrentRoom, languageCode));
+                hotelCurrentRoom.setPhotos(updatePhotos(hotelCurrentRoom, languageCode));
 
                 Optional<Room> retrievedCurrentRoomOptional = retrievedCurrentRooms.stream()
                         .filter(t -> hotelCurrentRoom.getId().equals(t.getId()))
@@ -220,27 +221,38 @@ public class HotelServiceImproved {
         return null;
     }
 
-    private List<Photo> updatePhotos(Hotel hotel, String languageCode) {
+    private List<Photo> updatePhotos(Object entity, String languageCode) {
 
-        List<Photo> hotelPhotos = hotel.getPhotos();
-        List<Photo> retrievedPhotos = hotelRepository.findPhotosByHotelId(hotel.getHotelId());
+        List<Photo> photos;
+        List<Photo> retrievedPhotos = new ArrayList<>();
 
-        if (Objects.nonNull(hotelPhotos) && !hotelPhotos.isEmpty()) {
+        if (entity instanceof Hotel hotel) {
+            photos = hotel.getPhotos();
+            retrievedPhotos = hotelRepository.findPhotosByHotelId(hotel.getHotelId());
+        } else if (entity instanceof Room room) {
+            photos = room.getPhotos();
+            retrievedPhotos = roomRepository.findPhotosByRoomId(room.getId());
+        } else {
+            photos = null;
+            throw new IllegalArgumentException("Unsupported entity type");
+        }
+
+        if (Objects.nonNull(photos) && !photos.isEmpty()) {
 
             List<Photo> filteredPhotos = retrievedPhotos.stream()
-                    .filter(retrievedPhoto -> hotelPhotos.stream()
-                            .anyMatch(hotelPhoto -> hotelPhoto.getUrl().equals(retrievedPhoto.getUrl())))
+                    .filter(retrievedPhoto -> photos.stream()
+                            .anyMatch(photo -> photo.getUrl().equals(retrievedPhoto.getUrl())))
                     .collect(Collectors.toList());
 
-            for (Photo hotelCurrentPhoto : hotelPhotos) {
+            for (Photo currentPhoto : photos) {
                 Optional<Photo> retrievedCurrentPhotoOptional = filteredPhotos.stream()
-                        .filter(t -> hotelCurrentPhoto.getUrl().equals(t.getUrl()))
+                        .filter(t -> currentPhoto.getUrl().equals(t.getUrl()))
                         .findFirst();
 
                 if (retrievedCurrentPhotoOptional.isEmpty()) {
-                    filteredPhotos.add(photoRepository.save(hotelCurrentPhoto));
+                    filteredPhotos.add(photoRepository.save(currentPhoto));
                 } else {
-                    Photo existingPhoto = photoValues(hotelCurrentPhoto, retrievedCurrentPhotoOptional.get()); // Example update
+                    Photo existingPhoto = photoValues(currentPhoto, retrievedCurrentPhotoOptional.get());
                 }
             }
 
