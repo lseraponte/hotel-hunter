@@ -275,7 +275,7 @@ public class HotelServiceImproved {
 
             for (Policy hotelCurrentPolicy : hotelPolicies) {
                 Optional<Policy> retrievedCurrentPolicyOptional = filteredPolicies.stream()
-                        .filter(t -> hotelCurrentPolicy.getPolicyType().equals(t.getPolicyType()))
+                        .filter(t -> hotelCurrentPolicy.getPolicyId().equals(t.getPolicyId()))
                         .findFirst();
 
                 if (retrievedCurrentPolicyOptional.isEmpty()) {

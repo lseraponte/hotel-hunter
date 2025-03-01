@@ -4,6 +4,8 @@ import com.lseraponte.cupidapi.hh.dto.HotelDTO;
 import com.lseraponte.cupidapi.hh.dto.HotelWithTranslationDTO;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import com.lseraponte.cupidapi.hh.model.Amenity;
+import com.lseraponte.cupidapi.hh.model.BedType;
+import com.lseraponte.cupidapi.hh.model.BedTypeTranslation;
 import com.lseraponte.cupidapi.hh.model.Facility;
 import com.lseraponte.cupidapi.hh.model.FacilityTranslation;
 import com.lseraponte.cupidapi.hh.model.Hotel;
@@ -11,6 +13,7 @@ import com.lseraponte.cupidapi.hh.model.Policy;
 import com.lseraponte.cupidapi.hh.model.Review;
 import com.lseraponte.cupidapi.hh.model.Room;
 import com.lseraponte.cupidapi.hh.repository.AmenityRepository;
+import com.lseraponte.cupidapi.hh.repository.BedTypeRepository;
 import com.lseraponte.cupidapi.hh.repository.FacilityRepository;
 import com.lseraponte.cupidapi.hh.repository.HotelRepository;
 import com.lseraponte.cupidapi.hh.repository.PolicyRepository;
@@ -41,12 +44,21 @@ public class HotelService {
     private final FacilityRepository facilityRepository;
     private final AmenityRepository amenityRepository;
     private final PolicyRepository policyRepository;
+    private final BedTypeRepository bedTypeRepository;
 
     @Transactional
     public Hotel saveHotelWithTranslation(HotelDTO hotelDTO, String language, List<ReviewDTO> reviewDTOList) {
 
         Language langEnum = Language.fromString(language);
         final String languageCode = langEnum.getCode();
+
+        Optional<Hotel> savedHotelWithLanguage = hotelRepository.findByIdWithTranslationsByLanguage(hotelDTO.hotelId(), languageCode);
+        if(savedHotelWithLanguage.isPresent())
+            return savedHotelWithLanguage.get();
+
+        Optional<Hotel> savedHotel = hotelRepository.findById(hotelDTO.hotelId());
+        if(savedHotel.isPresent())
+            return savedHotel.get();
 
         Hotel hotel = Hotel.fromDTO(hotelDTO, languageCode);
         boolean containsReviews = false;
@@ -59,114 +71,43 @@ public class HotelService {
             }
         }
 
-        Optional<Hotel> savedHotel = hotelRepository.findById(hotel.getHotelId());
-        if (savedHotel.isPresent()) {
-            Hotel retrievedHotel = savedHotel.get();
-            boolean hasLanguage = retrievedHotel.getTranslations()
-                    .stream()
-                    .anyMatch(translation -> languageCode.equalsIgnoreCase(translation.getLanguage()));
-            if(hasLanguage) {
-                if (containsReviews && retrievedHotel.getReviews() == null) {
-                    retrievedHotel.setReviews(reviewList);
-                    retrievedHotel = hotelRepository.save(retrievedHotel);
-                }
-                return retrievedHotel;
-            } else {
-                retrievedHotel.getTranslations().add(hotel.getTranslations().get(0));
-                if (Objects.nonNull(hotel.getRooms())) {
-                    retrievedHotel.getRooms().sort(Comparator.comparing(Room::getId));
-                    hotel.getRooms().sort(Comparator.comparing(Room::getId));
-                    for (int i = 0; i < retrievedHotel.getRooms().size(); i++) {
-                        Room currentRoomSavedRoom = retrievedHotel.getRooms().get(i);
-                        currentRoomSavedRoom.getTranslations().add(hotel.getRooms().get(i).getTranslations().get(0));
-                        List<Amenity> updatedAmenities = new ArrayList<>();
-                        for (Amenity amenity : hotel.getRooms().get(i).getRoomAmenities()) {
-                            Optional<Amenity> savedAmenity = amenityRepository.findByAmenityId(amenity.getAmenityId());
-                            if (savedAmenity.isPresent()) {
-                                Amenity existingAmenity = savedAmenity.get();
-                                if (existingAmenity.getTranslations().stream().noneMatch(
-                                        t -> languageCode.equalsIgnoreCase(t.getLanguage())
-                                )) {
-                                    existingAmenity.getTranslations().add(amenity.getTranslations().get(0));
-                                }
-                                updatedAmenities.add(savedAmenity.get());
-                            } else {
-                                updatedAmenities.add(amenityRepository.save(amenity));
-                            }
-                        }
-                        currentRoomSavedRoom.setRoomAmenities(updatedAmenities);
-
-                    }
-                }
-                if (Objects.nonNull(hotel.getPolicies()) && !hotel.getPolicies().isEmpty()) {
-
-                    Map<String, Policy> policyMap = retrievedHotel.getPolicies().stream()
-                            .collect(Collectors.toMap(Policy::getPolicyType, p -> p));
-
-                    for (Policy policy : hotel.getPolicies()) {
-                        Policy matchingPolicy = policyMap.get(policy.getPolicyType());
-
-                        if (matchingPolicy != null) {
-                            policy = policyMap.get(policy.getPolicyType());
-                        }
-                    }
-
-                }
-                if (Objects.nonNull(hotel.getFacilities()) && !hotel.getFacilities().isEmpty()) {
-
-                    List<Facility> updatedFacilities = new ArrayList<>();
-                    for (Facility facility : hotel.getFacilities()) {
-                        Optional<Facility> savedFacility = facilityRepository.findByFacilityId(facility.getFacilityId());
-                        if (savedFacility.isPresent()) {
-                            Facility existingFacility = savedFacility.get();
-                            if (existingFacility.getTranslations().stream().noneMatch(
-                                    t -> languageCode.equalsIgnoreCase(t.getLanguage())
-                            )) {
-                                existingFacility.getTranslations().add(facility.getTranslations().get(0));
-                            }
-                            updatedFacilities.add(savedFacility.get());
-                        } else {
-                            updatedFacilities.add(facilityRepository.save(facility));
-                        }
-                    }
-                    hotel.setFacilities(updatedFacilities);
-                }
-                hotel = retrievedHotel;
+        // Reusing pre-existing Room Amenities and BedTypes.
+        for (Room room : hotel.getRooms()) {
+            List<Amenity> updatedAmenities = new ArrayList<>();
+            for (Amenity amenity : room.getRoomAmenities()) {
+                Amenity existingAmenity = amenityRepository.findByAmenityId(amenity.getAmenityId())
+                        .orElseGet(() -> amenityRepository.save(amenity));
+                updatedAmenities.add(existingAmenity);
             }
+            room.setRoomAmenities(updatedAmenities);
+            List<BedType> updatedBedTypes = new ArrayList<>();
+            for (BedType bedType : room.getBedTypes()) {
+                BedTypeTranslation currentBedTypeTranslation = bedType.getTranslations().get(0);
+                BedType existingBedType = bedTypeRepository.findByBedTypeAndBedSize(currentBedTypeTranslation.getBedTypeName(), currentBedTypeTranslation.getBedSize())
+                        .orElseGet(() -> bedTypeRepository.save(bedType));
+                updatedBedTypes.add(existingBedType);
+            }
+            room.setBedTypes(updatedBedTypes);
         }
-
-        else {
-            // Reusing pre-existing Room Amenities and Facilities.
-
-            for (Room room : hotel.getRooms()) {
-                List<Amenity> updatedAmenities = new ArrayList<>();
-
-                for (Amenity amenity : room.getRoomAmenities()) {
-                    Amenity existingAmenity = amenityRepository.findByAmenityId(amenity.getAmenityId())
-                            .orElseGet(() -> amenityRepository.save(amenity)); // Save only if not found
-
-                    updatedAmenities.add(existingAmenity);
-                }
-
-                room.setRoomAmenities(updatedAmenities);
-            }
-            List<Facility> updatedFacilities = new ArrayList<>();
-            for (Facility facility : hotel.getFacilities()) {
-                Facility existingFacility = facilityRepository.findByFacilityId(facility.getFacilityId())
-                        .orElseGet(() -> facilityRepository.save(facility));
-
-                updatedFacilities.add(existingFacility);
-
-            }
-            hotel.setFacilities(updatedFacilities);
-
+        // Reusing pre-existing Facilities
+        if (Objects.nonNull(hotel.getFacilities()) && !hotel.getFacilities().isEmpty()) {
+        List<Facility> updatedFacilities = new ArrayList<>();
+        for (Facility facility : hotel.getFacilities()) {
+            Facility existingFacility = facilityRepository.findByFacilityId(facility.getFacilityId())
+                    .orElseGet(() -> facilityRepository.save(facility));
+            updatedFacilities.add(existingFacility);
+        }
+        hotel.setFacilities(updatedFacilities);
         }
 
         // Reusing existing Policies
         if (Objects.nonNull(hotel.getPolicies()) && !hotel.getPolicies().isEmpty()) {
             List<Policy> updatedPolicies = new ArrayList<>();
             for (Policy policy : hotel.getPolicies()) {
-                Optional<Policy> savedPolicy = policyRepository.findByPolicyType(policy.getPolicyType());
+                Optional<Policy> savedPolicy = policyRepository.findByPolicyTypeAndNameAndDescription(
+                        policy.getPolicyType(),
+                        policy.getName(),
+                        policy.getDescription());
                 updatedPolicies.add(savedPolicy.orElse(policy));
             }
             hotel.setPolicies(updatedPolicies);

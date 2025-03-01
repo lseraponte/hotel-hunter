@@ -50,8 +50,12 @@ public class Room {
     @Column(name = "max_occupancy")
     private int maxOccupancy;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "room_bed_types",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "bed_type_id")
+    )
     private List<BedType> bedTypes;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

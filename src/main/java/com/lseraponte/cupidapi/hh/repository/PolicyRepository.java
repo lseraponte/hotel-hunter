@@ -11,5 +11,6 @@ public interface PolicyRepository  extends JpaRepository<Policy, Integer> {
 
     Optional<Policy> findByPolicyType(String policyType);
     Optional<Policy> findByPolicyTypeAndName(String policyType, String name);
+    Optional<Policy> findByPolicyTypeAndNameAndDescription(String policyType, String name, String description);
 
 }

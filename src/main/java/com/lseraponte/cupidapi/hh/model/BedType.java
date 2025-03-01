@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,7 @@ public class BedType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bed_type_id")
-    private int bedTypeId;
+    private Integer bedTypeId;
 
     @Column(name = "quantity")
     private int quantity;
@@ -52,7 +53,7 @@ public class BedType {
                 .language(language)
                 .build();
 
-        bedType.setTranslations(List.of(translation));
+        bedType.setTranslations(new ArrayList<>(List.of(translation)));
 
         return bedType;
     }
