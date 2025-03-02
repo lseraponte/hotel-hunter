@@ -30,7 +30,7 @@ public class Amenity {
     private Integer amenityId;
 
     @Column(name = "sort")
-    private int sort;
+    private Integer sort;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "amenity_id")

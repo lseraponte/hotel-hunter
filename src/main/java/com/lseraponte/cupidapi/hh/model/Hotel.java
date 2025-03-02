@@ -1,6 +1,5 @@
 package com.lseraponte.cupidapi.hh.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lseraponte.cupidapi.hh.dto.HotelDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,25 +35,25 @@ public class Hotel {
 
     @Id
     @Column(name = "hotel_id")
-    private int hotelId;
+    private Integer hotelId;
 
     @Column(name = "cupid_id")
-    private int cupidId;
+    private Integer cupidId;
 
     @Column(name = "main_image_th")
     private String mainImageTh;
 
     @Column(name = "hotel_type_id")
-    private int hotelTypeId;
+    private Integer hotelTypeId;
 
     @Column(name = "chain_id")
-    private int chainId;
+    private Integer chainId;
 
     @Column(name = "latitude")
-    private double latitude;
+    private Double latitude;
 
     @Column(name = "longitude")
-    private double longitude;
+    private Double longitude;
 
     @Column(name = "phone")
     private String phone;
@@ -69,16 +68,16 @@ public class Hotel {
     private Address address;
 
     @Column(name = "stars")
-    private int stars;
+    private Integer stars;
 
     @Column(name = "airport_code")
     private String airportCode;
 
     @Column(name = "rating")
-    private double rating;
+    private Double rating;
 
     @Column(name = "review_count")
-    private int reviewCount;
+    private Integer reviewCount;
 
     @Column(name = "checkin_start")
     private String checkinStart;
@@ -93,13 +92,13 @@ public class Hotel {
     private String parking;
 
     @Column(name = "group_room_min")
-    private int groupRoomMin;
+    private Integer groupRoomMin;
 
     @Column(name = "child_allowed")
-    private boolean childAllowed;
+    private Boolean childAllowed;
 
     @Column(name = "pets_allowed")
-    private boolean petsAllowed;
+    private Boolean petsAllowed;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")

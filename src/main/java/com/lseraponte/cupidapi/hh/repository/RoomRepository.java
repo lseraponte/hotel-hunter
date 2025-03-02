@@ -1,6 +1,7 @@
 package com.lseraponte.cupidapi.hh.repository;
 
 import com.lseraponte.cupidapi.hh.model.Amenity;
+import com.lseraponte.cupidapi.hh.model.BedType;
 import com.lseraponte.cupidapi.hh.model.Photo;
 import com.lseraponte.cupidapi.hh.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,9 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
 
     @Query("SELECT a FROM Room r JOIN r.roomAmenities a WHERE r.id = :id")
     List<Amenity> findAmenityByRoomId(@Param("id") Integer id);
+
+    @Query("SELECT b FROM Room r JOIN r.bedTypes b WHERE r.id = :id")
+    List<BedType> findBedTypeByRoomId(@Param("id") Integer id);
 
     @Query("SELECT p FROM Room r JOIN r.photos p WHERE r.id = :id")
     List<Photo> findPhotosByRoomId(@Param("id") Integer id);

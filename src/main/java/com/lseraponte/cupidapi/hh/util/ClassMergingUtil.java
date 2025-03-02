@@ -1,6 +1,7 @@
 package com.lseraponte.cupidapi.hh.util;
 
 import com.lseraponte.cupidapi.hh.model.AmenityTranslation;
+import com.lseraponte.cupidapi.hh.model.BedTypeTranslation;
 import com.lseraponte.cupidapi.hh.model.FacilityTranslation;
 import com.lseraponte.cupidapi.hh.model.HotelTranslation;
 import com.lseraponte.cupidapi.hh.model.Photo;
@@ -46,6 +47,15 @@ public class ClassMergingUtil {
         return currentValues;
     }
 
+    public static BedTypeTranslation bedTypeTranslationValues (BedTypeTranslation newValues,
+                                                                BedTypeTranslation currentValues) {
+
+        currentValues.setBedTypeName(newValues.getBedTypeName());
+        currentValues.setBedSize(newValues.getBedSize());
+
+        return currentValues;
+    }
+
     public static Photo photoValues (Photo newValues, Photo currentValues) {
 
         currentValues.setUrl(newValues.getUrl());
@@ -53,13 +63,12 @@ public class ClassMergingUtil {
         currentValues.setImageDescription(newValues.getImageDescription());
         currentValues.setImageClass1(newValues.getImageClass1());
         currentValues.setImageClass2(newValues.getImageClass2());
-        currentValues.setMainPhoto(newValues.isMainPhoto());
+        currentValues.setMainPhoto(newValues.getMainPhoto());
         currentValues.setScore(newValues.getScore());
         currentValues.setClassId(newValues.getClassId());
         currentValues.setClassOrder(newValues.getClassOrder());
 
         return currentValues;
     }
-
 
 }

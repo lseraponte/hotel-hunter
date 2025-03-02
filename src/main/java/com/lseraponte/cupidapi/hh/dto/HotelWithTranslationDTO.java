@@ -1,10 +1,10 @@
 package com.lseraponte.cupidapi.hh.dto;
 
 public record HotelWithTranslationDTO(
-        int hotelId,
-        int cupidId,
+        Integer hotelId,
+        Integer cupidId,
         String hotelName,
-        int stars,
+        Integer stars,
         String description,
         String markdownDescription,
         String importantInfo,
@@ -12,14 +12,14 @@ public record HotelWithTranslationDTO(
         String phone,
         String fax,
         String email,
-        double rating,
-        int reviewCount,
+        Double rating,
+        Integer reviewCount,
         String checkinStart,
         String checkinEnd,
         String checkout,
         String parking,
-        boolean childAllowed,
-        boolean petsAllowed,
+        Boolean childAllowed,
+        Boolean petsAllowed,
         String mainImageTh
 ) {
 }

@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -31,10 +32,11 @@ public class BedType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bed_type_id")
+    @JsonIgnore
     private Integer bedTypeId;
 
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "bed_type_id")

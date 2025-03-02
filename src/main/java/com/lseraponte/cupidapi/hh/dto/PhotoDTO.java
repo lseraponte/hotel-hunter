@@ -6,8 +6,8 @@ public record PhotoDTO(
         String imageDescription,
         String imageClass1,
         String imageClass2,
-        boolean mainPhoto,
-        double score,
-        int classId,
-        int classOrder
+        Boolean mainPhoto,
+        Double score,
+        Integer classId,
+        Integer classOrder
 ) { }

@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lseraponte.cupidapi.hh.dto.PolicyDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "policies")
 @Getter
@@ -26,6 +29,7 @@ public class Policy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "policy_id")
+    @JsonIgnore
     private Integer policyId;
 
     @Column(name = "policy_type")
@@ -48,6 +52,7 @@ public class Policy {
     private String parking;
 
     @Column(name = "language", nullable = false)
+    @JsonIgnore
     private String language;
 
     // Convert from DTO to Entity
@@ -63,6 +68,20 @@ public class Policy {
                 .language(language)
                 .build();
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Policy policy = (Policy) o;
+        return Objects.equals(policyType, policy.policyType) &&
+                Objects.equals(name, policy.name) &&
+                Objects.equals(description, policy.description) &&
+                Objects.equals(childAllowed, policy.childAllowed) &&
+                Objects.equals(petsAllowed, policy.petsAllowed) &&
+                Objects.equals(parking, policy.parking) &&
+                Objects.equals(language, policy.language);
     }
 
 }

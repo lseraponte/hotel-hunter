@@ -16,4 +16,7 @@ public interface BedTypeRepository extends JpaRepository<BedType, Integer> {
     @Query("SELECT b FROM BedType b JOIN b.translations t WHERE t.bedTypeName = :bedTypeName AND t.bedSize = :bedSize")
     Optional<BedType> findByBedTypeAndBedSize(@Param("bedTypeName") String bedTypeName, @Param("bedSize") String bedSize);
 
+    @Query("SELECT b FROM BedType b JOIN b.translations t WHERE t.bedTypeName = :bedTypeName AND t.bedSize = :bedSize AND t.language = :language")
+    Optional<BedType> findByBedTypeAndBedSizeAndLanguage(@Param("bedTypeName") String bedTypeName, @Param("bedSize") String bedSize, @Param("language") String language);
+
 }

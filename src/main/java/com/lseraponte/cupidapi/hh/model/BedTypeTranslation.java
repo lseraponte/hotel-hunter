@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "bed_type_translations")
 @Getter
@@ -25,6 +28,7 @@ public class BedTypeTranslation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bed_type_translation_id")
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "bed_type")
@@ -34,6 +38,7 @@ public class BedTypeTranslation {
     private String bedSize;
 
     @Column(name = "language", nullable = false)
+    @JsonIgnore
     private String language;
 
     public static BedTypeTranslation fromDTO(RoomDTO.BedTypeDTO dto, String language) {
@@ -43,5 +48,18 @@ public class BedTypeTranslation {
                 .bedSize(dto.bedSize())
                 .language(language)
                 .build();
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BedTypeTranslation that = (BedTypeTranslation) o;
+        return Objects.equals(bedTypeName, that.bedTypeName) &&
+                Objects.equals(bedSize, that.bedSize);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bedTypeName, bedSize);
     }
 }

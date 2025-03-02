@@ -28,7 +28,7 @@ public class HotelStartupService {
         this.hotelService = hotelService;
     }
 
-//    @PostConstruct
+    @PostConstruct
     public void fetchHotelsOnStartup() {
 //        List<Integer> hotelIds = loadHotelIdsFromFile("hotel_ids.txt");
         List<Integer> hotelIds = loadHotelIdsFromFile("partial_hotel_ids.txt");
@@ -54,8 +54,8 @@ public class HotelStartupService {
                                 logger.info("Saving hotel data for hotel ID: {}", hotelId);
 
                                 return Mono.fromCallable(() -> hotelService.saveHotelWithTranslation(hotel, "en", reviews))
-                                        .then(Mono.fromCallable(() -> hotelService.saveHotelWithTranslation(hotelFr, "fr", reviews)))
-                                        .then(Mono.fromCallable(() -> hotelService.saveHotelWithTranslation(hotelEs, "es", reviews)))
+                                        .then(Mono.fromCallable(() -> hotelService.updateHotel(hotelFr, reviews, "fr")))
+                                        .then(Mono.fromCallable(() -> hotelService.updateHotel(hotelEs, reviews, "es")))
                                         .doOnSuccess(v -> logger.info("Successfully saved hotel ID: {}", hotelId));
                             });
                 })

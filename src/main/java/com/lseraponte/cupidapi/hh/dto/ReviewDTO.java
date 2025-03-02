@@ -1,7 +1,7 @@
 package com.lseraponte.cupidapi.hh.dto;
 
 public record ReviewDTO(
-        int averageScore,
+        Integer averageScore,
         String country,
         String type,
         String name,

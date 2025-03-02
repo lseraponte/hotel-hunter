@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,6 +27,7 @@ public class RoomTranslation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_translation_id")
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "room_name")
@@ -36,6 +38,7 @@ public class RoomTranslation {
     private String description;
 
     @Column(name = "language", nullable = false)
+    @JsonIgnore
     private String language;
 
     public static RoomTranslation fromDTO(RoomDTO dto, String language) {

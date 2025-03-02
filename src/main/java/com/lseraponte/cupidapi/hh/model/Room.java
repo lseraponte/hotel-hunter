@@ -8,7 +8,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -36,19 +35,19 @@ public class Room {
     private Integer id;
 
     @Column(name = "room_size_square")
-    private int roomSizeSquare;
+    private Integer roomSizeSquare;
 
     @Column(name = "room_size_unit")
     private String roomSizeUnit;
 
     @Column(name = "max_adults")
-    private int maxAdults;
+    private Integer maxAdults;
 
     @Column(name = "max_children")
-    private int maxChildren;
+    private Integer maxChildren;
 
     @Column(name = "max_occupancy")
-    private int maxOccupancy;
+    private Integer maxOccupancy;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(

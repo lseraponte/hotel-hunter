@@ -3,20 +3,20 @@ package com.lseraponte.cupidapi.hh.dto;
 import java.util.List;
 
 public record RoomDTO(
-        int id,
+        Integer id,
         String roomName,
         String description,
-        int roomSizeSquare,
+        Integer roomSizeSquare,
         String roomSizeUnit,
         String hotelId,
-        int maxAdults,
-        int maxChildren,
-        int maxOccupancy,
+        Integer maxAdults,
+        Integer maxChildren,
+        Integer maxOccupancy,
         List<BedTypeDTO> bedTypes,
         List<AmenityDTO> roomAmenities,
         List<PhotoDTO> photos
 ) {
-    public record BedTypeDTO(int quantity, String bedType, String bedSize) {}
+    public record BedTypeDTO(Integer quantity, String bedType, String bedSize) {}
 
-    public record AmenityDTO(int amenitiesId, String name, int sort) {}
+    public record AmenityDTO(Integer amenitiesId, String name, Integer sort) {}
 }

@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,10 +29,11 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "average_score")
-    private int averageScore;
+    private Integer averageScore;
 
     @Column(name = "country")
     private String country;
@@ -49,6 +51,7 @@ public class Review {
     private String headline;
 
     @Column(name = "language")
+    @JsonIgnore
     private String language;
 
     @Lob

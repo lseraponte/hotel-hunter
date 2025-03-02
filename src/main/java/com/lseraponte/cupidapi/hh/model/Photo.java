@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lseraponte.cupidapi.hh.dto.PhotoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "photo_id")
+    @JsonIgnore
     private Integer photoId;
 
     @Column(name = "url")
@@ -43,16 +45,16 @@ public class Photo {
     private String imageClass2;
 
     @Column(name = "main_photo")
-    private boolean mainPhoto;
+    private Boolean mainPhoto;
 
     @Column(name = "score")
-    private double score;
+    private Double score;
 
     @Column(name = "class_id")
-    private int classId;
+    private Integer classId;
 
     @Column(name = "class_order")
-    private int classOrder;
+    private Integer classOrder;
 
     // Convert from DTO to Entity
     public static Photo fromDTO(PhotoDTO dto) {
