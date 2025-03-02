@@ -251,7 +251,7 @@ public class HotelService {
 
                     facility.setTranslations(filteredTranslations); // Update translations
 
-                    return !filteredTranslations.isEmpty(); // Only keep facilities that have translations
+                    return !filteredTranslations.isEmpty();
                 })
                 .collect(Collectors.toList()));
 
@@ -268,6 +268,13 @@ public class HotelService {
             for (Amenity amenity : room.getRoomAmenities()) {
                 Hibernate.initialize(amenity.getTranslations());
                 amenity.setTranslations(amenity.getTranslations().stream()
+                        .filter(t -> t.getLanguage().equals(language))
+                        .collect(Collectors.toList()));
+            }
+
+            for (BedType bedType : room.getBedTypes()) {
+                Hibernate.initialize(bedType.getTranslations());
+                bedType.setTranslations(bedType.getTranslations().stream()
                         .filter(t -> t.getLanguage().equals(language))
                         .collect(Collectors.toList()));
             }
@@ -366,7 +373,6 @@ public class HotelService {
         if (Objects.nonNull(hotelCurrentBedTypes) && !hotelCurrentBedTypes.isEmpty()) {
             for (BedType currentBedType : hotelCurrentBedTypes) {
 
-
                 Optional<BedType> retrievedCurrentBedTypeOptional = retrievedCurrentBedTypes.stream()
                         .filter(t -> {
                             List<BedTypeTranslation> currentTranslations = currentBedType.getTranslations();
@@ -386,7 +392,6 @@ public class HotelService {
                                     .allMatch(i -> currentTranslations.get(i).equals(retrievedTranslations.get(i)));
                         })
                         .findFirst();
-
 
                 if (retrievedCurrentBedTypeOptional.isPresent()) {
                     BedType existingBedType = retrievedCurrentBedTypeOptional.get();
@@ -508,7 +513,7 @@ public class HotelService {
     private List<Policy> updatePolicies(Hotel hotel, String languageCode) {
 
         List<Policy> hotelPolicies = hotel.getPolicies();
-        List<Policy> retrievedPolicies = policyRepository.findAll();
+        List<Policy> retrievedPolicies = hotelRepository.findPolicyByHotelId(hotel.getHotelId());
         List<Policy> updatedPolicyList = new ArrayList<>();
 
         if (Objects.nonNull(hotelPolicies) && !hotelPolicies.isEmpty()) {

@@ -47,7 +47,7 @@ public class CupidApiService {
                         response -> response.bodyToMono(String.class)
                                 .flatMap(errorBody -> Mono.error(new RuntimeException("API Error: " + errorBody)))
                 )
-                .bodyToFlux(ReviewDTO.class); // Updated to bodyToFlux for list response
+                .bodyToFlux(ReviewDTO.class);
     }
 
 }
