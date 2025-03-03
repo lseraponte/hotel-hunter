@@ -28,7 +28,7 @@ public class HotelStartupService {
         this.hotelService = hotelService;
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void fetchHotelsOnStartup() {
 //        List<Integer> hotelIds = loadHotelIdsFromFile("hotel_ids.txt");
         List<Integer> hotelIds = loadHotelIdsFromFile("partial_hotel_ids.txt");

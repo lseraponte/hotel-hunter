@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
+
+import java.time.Duration;
 
 @Service
 public class CupidApiService {
@@ -24,7 +27,10 @@ public class CupidApiService {
                         response -> response.bodyToMono(String.class)
                                 .flatMap(errorBody -> Mono.error(new RuntimeException("API Error: " + errorBody)))
                 )
-                .bodyToMono(HotelDTO.class);
+                .bodyToMono(HotelDTO.class)
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(5))
+                        .filter(throwable -> throwable instanceof RuntimeException));
+
     }
 
     public Mono<HotelDTO> getHotelByIdWithTranslation(int hotelId, String language) {
@@ -35,7 +41,9 @@ public class CupidApiService {
                         response -> response.bodyToMono(String.class)
                                 .flatMap(errorBody -> Mono.error(new RuntimeException("API Error: " + errorBody)))
                 )
-                .bodyToMono(HotelDTO.class);
+                .bodyToMono(HotelDTO.class)
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(5))
+                        .filter(throwable -> throwable instanceof RuntimeException));
     }
 
     public Flux<ReviewDTO> getHotelReviews(int hotelId, int reviewLimit) {
@@ -47,7 +55,9 @@ public class CupidApiService {
                         response -> response.bodyToMono(String.class)
                                 .flatMap(errorBody -> Mono.error(new RuntimeException("API Error: " + errorBody)))
                 )
-                .bodyToFlux(ReviewDTO.class);
+                .bodyToFlux(ReviewDTO.class)
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(5))
+                        .filter(throwable -> throwable instanceof RuntimeException));
     }
 
 }
