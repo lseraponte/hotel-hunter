@@ -2,7 +2,6 @@ package com.lseraponte.cupidapi.hh.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lseraponte.cupidapi.hh.dto.BedTypeDTO;
-import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

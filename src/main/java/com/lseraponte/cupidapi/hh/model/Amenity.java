@@ -1,7 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
 import com.lseraponte.cupidapi.hh.dto.AmenityDTO;
-import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

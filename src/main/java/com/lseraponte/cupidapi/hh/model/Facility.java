@@ -33,7 +33,6 @@ public class Facility {
     @JoinColumn(name = "facility_id")
     private List<FacilityTranslation> translations;
 
-    // Convert from DTO to Entity
     public static Facility fromDTO(FacilityDTO dto, String language) {
 
         Facility facility = Facility.builder()

@@ -13,7 +13,6 @@ public interface AmenityRepository extends JpaRepository<Amenity, Integer> {
 
     Optional<Amenity> findByAmenityId(Integer amenityId);
 
-    // Fetch an Amenity along with its translations filtered by language
     @Query("SELECT a FROM Amenity a LEFT JOIN FETCH a.translations t WHERE a.amenityId = :amenityId AND t.language = :language")
     Optional<Amenity> findByIdWithTranslationsByLanguage(@Param("amenityId") Integer amenityId, @Param("language") String language);
 
