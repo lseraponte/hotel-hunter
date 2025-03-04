@@ -6,27 +6,28 @@ import com.lseraponte.cupidapi.hh.service.CupidApiService;
 import com.lseraponte.cupidapi.hh.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Mono;
-import reactor.core.publisher.Flux;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.reactive.server.WebTestClient.bindToController;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebFluxTest(CupidApiController.class)
-public class CupidApiControllerTest {
+@WebMvcTest(CupidApiController.class)
+class CupidApiControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @MockBean
     private CupidApiService cupidApiService;
-
-    private WebTestClient webTestClient;
-    private CupidApiController cupidApiController;
 
     private HotelDTO hotelDTO;
     private List<ReviewDTO> reviewDTOList;
@@ -34,61 +35,51 @@ public class CupidApiControllerTest {
 
     @BeforeEach
     void setUp() throws IOException {
-
-        cupidApiController = new CupidApiController(cupidApiService);
-
-        webTestClient = bindToController(cupidApiController).build();
-
         hotelDTO = TestUtil.readJsonFromFile("src/test/resources/hotel.json", HotelDTO.class);
         reviewDTOList = TestUtil.readJsonListFromFile("src/test/resources/reviews.json", ReviewDTO.class);
         language = "en";
     }
 
     @Test
-    void testGetHotel() {
+    void testGetHotel() throws Exception {
         int hotelId = hotelDTO.hotelId();
 
-        when(cupidApiService.getHotelById(hotelId)).thenReturn(Mono.just(hotelDTO));
+        when(cupidApiService.getHotelById(hotelId)).thenReturn(hotelDTO);
 
-        webTestClient.get()
-                .uri("/cupid-api/hotels/{id}", hotelId)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(HotelDTO.class)
-                .value(hotel -> assertThat(hotel).isEqualTo(hotelDTO));
+        mockMvc.perform(get("/cupid-api/hotels/{id}", hotelId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.hotel_id").value(1738870));
+
 
         verify(cupidApiService, times(1)).getHotelById(hotelId);
     }
 
     @Test
-    void testGetHotelWithTranslation() {
+    void testGetHotelWithTranslation() throws Exception {
         int hotelId = hotelDTO.hotelId();
 
-        when(cupidApiService.getHotelByIdWithTranslation(hotelId, language)).thenReturn(Mono.just(hotelDTO));
+        when(cupidApiService.getHotelByIdWithTranslation(hotelId, language)).thenReturn(hotelDTO);
 
-        webTestClient.get()
-                .uri("/cupid-api/hotels/{id}/lang/{language}", hotelId, language)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(HotelDTO.class)
-                .value(hotel -> assertThat(hotel).isEqualTo(hotelDTO));
+        mockMvc.perform(get("/cupid-api/hotels/{id}/lang/{language}", hotelId, language)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.hotel_id").value(1738870));
 
         verify(cupidApiService, times(1)).getHotelByIdWithTranslation(hotelId, language);
     }
 
     @Test
-    void testGetReviews() {
+    void testGetReviews() throws Exception {
         int hotelId = hotelDTO.hotelId();
         int reviewsLimit = 5;
 
-        when(cupidApiService.getHotelReviews(hotelId, reviewsLimit)).thenReturn(Flux.just(reviewDTOList.get(0)));
+        when(cupidApiService.getHotelReviews(hotelId, reviewsLimit)).thenReturn(List.of(reviewDTOList.get(0)));
 
-        webTestClient.get()
-                .uri("/cupid-api/hotels/reviews/{id}/{reviewsLimit}", hotelId, reviewsLimit)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBodyList(ReviewDTO.class)
-                .value(reviews -> assertThat(reviews).hasSize(1).contains(reviewDTOList.get(0)));
+        mockMvc.perform(get("/cupid-api/hotels/reviews/{id}/{reviewsLimit}", hotelId, reviewsLimit)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value(reviewDTOList.get(0).name()));
 
         verify(cupidApiService, times(1)).getHotelReviews(hotelId, reviewsLimit);
     }

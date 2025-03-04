@@ -3,6 +3,7 @@ package com.lseraponte.cupidapi.hh.service;
 import com.lseraponte.cupidapi.hh.dto.HotelDTO;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
 import com.lseraponte.cupidapi.hh.repository.HotelRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,20 +11,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// This service allows Hotel updates on regular basis using a Scheduled function
 @Service
+@RequiredArgsConstructor
 public class HotelCronService {
 
     private static final Logger logger = LoggerFactory.getLogger(HotelCronService.class);
     private final CupidApiService cupidApiService;
     private final HotelService hotelService;
     private final HotelRepository hotelRepository;
-
-    public HotelCronService(CupidApiService cupidApiService, HotelService hotelService, HotelRepository hotelRepository) {
-        this.cupidApiService = cupidApiService;
-        this.hotelService = hotelService;
-        this.hotelRepository = hotelRepository;
-    }
 
     @Scheduled(cron = "0 0 * * * *") // Runs every hour
     public void fetchHotelsPeriodically() {
@@ -35,10 +30,10 @@ public class HotelCronService {
             logger.info("Fetching data for hotel ID: {}", hotelId);
 
             try {
-                HotelDTO hotelDTO = cupidApiService.getHotelByIdWithTranslation(hotelId, "en").block();
-                HotelDTO hotelFr = cupidApiService.getHotelByIdWithTranslation(hotelId, "fr").block();
-                HotelDTO hotelEs = cupidApiService.getHotelByIdWithTranslation(hotelId, "es").block();
-                List<ReviewDTO> reviews = cupidApiService.getHotelReviews(hotelId, 10).collectList().block();
+                HotelDTO hotelDTO = cupidApiService.getHotelByIdWithTranslation(hotelId, "en");
+                HotelDTO hotelFr = cupidApiService.getHotelByIdWithTranslation(hotelId, "fr");
+                HotelDTO hotelEs = cupidApiService.getHotelByIdWithTranslation(hotelId, "es");
+                List<ReviewDTO> reviews = cupidApiService.getHotelReviews(hotelId, 10);
 
                 if (hotelDTO != null && reviews != null) {
                     hotelService.updateHotel(hotelDTO, reviews, "en");
@@ -53,5 +48,4 @@ public class HotelCronService {
 
         logger.info("Hotel update cron job completed");
     }
-
 }

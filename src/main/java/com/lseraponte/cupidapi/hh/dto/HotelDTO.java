@@ -1,8 +1,12 @@
 package com.lseraponte.cupidapi.hh.dto;
 
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import java.util.List;
 
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public record HotelDTO(
         Integer hotelId,
         Integer cupidId,

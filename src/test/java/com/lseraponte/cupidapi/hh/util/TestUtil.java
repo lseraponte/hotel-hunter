@@ -26,4 +26,12 @@ public class TestUtil {
         JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, clazz);
         return objectMapper.readValue(new File(filePath), type);
     }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

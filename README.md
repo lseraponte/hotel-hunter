@@ -45,7 +45,15 @@ To run the application navigate to the root folder of the project from your comm
 
 The App will run on an embedded Tomcat and is reachable on ```localhost:8080``` when run locally.
 
-Attached a Postman collection/environment to send requests to the APIs.
+A Swagger endpoint is available to consult APIs specs here: ```localhost:8080/swagger-ui/index.html```.
+The embedded h2 database console is available here: ```localhost:8080/he-console```.
 
-A Swagger endpoint is available to consult APIs specs here: ```localhost:8080/webjars/swagger-ui/index.html```.
+### Postman for testing
+Attached, int the src/main/resources folder, there is a Postman collection with its environment to send requests to the APIs.
 
+### Areas of improvement
+
+In order to deliver this project in a reasonable time frame, the current version have few areas of improvements:
+- Code cuts. Some methods would look very similar and with the introduction of generics, many lines of code could be removed.
+- Polling towards Cupid API. At the moment the project makes simple RestCalls for the stored Hotels to get updates. This could be improved putting in place something like Kafka, in order to update regularly and promptly the locally saved records.
+- Tests, Only few Unit tests covering the different areas are in place, there is room for coverage improvement.

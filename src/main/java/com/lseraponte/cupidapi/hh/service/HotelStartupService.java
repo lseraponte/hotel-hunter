@@ -2,66 +2,50 @@ package com.lseraponte.cupidapi.hh.service;
 
 import com.lseraponte.cupidapi.hh.dto.HotelDTO;
 import com.lseraponte.cupidapi.hh.dto.ReviewDTO;
-import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import jakarta.annotation.PostConstruct;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class HotelStartupService {
 
     private static final Logger logger = LoggerFactory.getLogger(HotelStartupService.class);
-
     private final CupidApiService cupidApiService;
-    private final HotelService hotelService; // Assuming you have a repository
+    private final HotelService hotelService;
 
-    public HotelStartupService(CupidApiService cupidApiService,
-                               HotelService hotelService) {
-        this.cupidApiService = cupidApiService;
-        this.hotelService = hotelService;
-    }
-
-//    @PostConstruct
+    @PostConstruct
     public void fetchHotelsOnStartup() {
 //        List<Integer> hotelIds = loadHotelIdsFromFile("hotel_ids.txt");
         List<Integer> hotelIds = loadHotelIdsFromFile("partial_hotel_ids.txt");
 
-        Flux.fromIterable(hotelIds)
-                .concatMap(hotelId -> {
-                    logger.info("Fetching data for hotel ID: {}", hotelId);
+        hotelIds.forEach(hotelId -> {
+            logger.info("Fetching data for hotel ID: {}", hotelId);
+            try {
+                HotelDTO hotelDTO = cupidApiService.getHotelByIdWithTranslation(hotelId, "en");
+                HotelDTO hotelFr = cupidApiService.getHotelByIdWithTranslation(hotelId, "fr");
+                HotelDTO hotelEs = cupidApiService.getHotelByIdWithTranslation(hotelId, "es");
+                List<ReviewDTO> reviews = cupidApiService.getHotelReviews(hotelId, 10);
 
-                    return cupidApiService.getHotelById(hotelId)
-                            .onErrorResume(e -> {
-                                logger.error("Failed to fetch hotel ID: {}. Skipping...", hotelId, e);
-                                return Mono.empty();
-                            })
-                            .zipWhen(h -> cupidApiService.getHotelByIdWithTranslation(hotelId, "fr"))
-                            .zipWhen(h -> cupidApiService.getHotelByIdWithTranslation(hotelId, "es"))
-                            .zipWhen(h -> cupidApiService.getHotelReviews(hotelId, 10).collectList())
-                            .flatMap(tuple -> {
-                                HotelDTO hotel = tuple.getT1().getT1().getT1();
-                                HotelDTO hotelFr = tuple.getT1().getT1().getT2();
-                                HotelDTO hotelEs = tuple.getT1().getT2();
-                                List<ReviewDTO> reviews = tuple.getT2();
+                if (hotelDTO != null && reviews != null) {
+                    hotelService.saveHotelWithTranslation(hotelDTO, "en", reviews);
+                    hotelService.updateHotel(hotelFr, reviews, "fr");
+                    hotelService.updateHotel(hotelEs, reviews, "es");
+                    logger.info("Successfully saved hotel ID: {}", hotelId);
+                }
+            } catch (Exception e) {
+                logger.error("Failed to process hotel ID: {}", hotelId, e);
+            }
+        });
 
-                                logger.info("Saving hotel data for hotel ID: {}", hotelId);
-
-                                return Mono.fromCallable(() -> hotelService.saveHotelWithTranslation(hotel, "en", reviews))
-                                        .then(Mono.fromCallable(() -> hotelService.updateHotel(hotelFr, reviews, "fr")))
-                                        .then(Mono.fromCallable(() -> hotelService.updateHotel(hotelEs, reviews, "es")))
-                                        .doOnSuccess(v -> logger.info("Successfully saved hotel ID: {}", hotelId));
-                            });
-                })
-                .doOnComplete(() -> logger.info("All hotels processed successfully."))
-                .doOnError(error -> logger.error("Error processing hotels: {}", error.getMessage(), error))
-                .subscribe();
+        logger.info("All hotels processed successfully.");
     }
 
     private List<Integer> loadHotelIdsFromFile(String fileName) {
@@ -75,5 +59,4 @@ public class HotelStartupService {
             throw new RuntimeException("Failed to load hotel IDs from file", e);
         }
     }
-
 }

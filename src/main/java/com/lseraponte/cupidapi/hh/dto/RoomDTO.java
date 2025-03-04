@@ -1,7 +1,11 @@
 package com.lseraponte.cupidapi.hh.dto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import java.util.List;
 
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public record RoomDTO(
         Integer id,
         String roomName,
@@ -16,7 +20,5 @@ public record RoomDTO(
         List<AmenityDTO> roomAmenities,
         List<PhotoDTO> photos
 ) {
-    public record BedTypeDTO(Integer quantity, String bedType, String bedSize) {}
 
-    public record AmenityDTO(Integer amenitiesId, String name, Integer sort) {}
 }

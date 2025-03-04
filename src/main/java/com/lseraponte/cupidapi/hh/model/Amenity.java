@@ -1,5 +1,6 @@
 package com.lseraponte.cupidapi.hh.model;
 
+import com.lseraponte.cupidapi.hh.dto.AmenityDTO;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -37,7 +38,7 @@ public class Amenity {
     private List<AmenityTranslation> translations;
 
     // Convert from DTO to Entity
-    public static Amenity fromDTO(RoomDTO.AmenityDTO dto, String language) {
+    public static Amenity fromDTO(AmenityDTO dto, String language) {
 
         Amenity amenity = Amenity.builder()
                 .amenityId(dto.amenitiesId())

@@ -1,0 +1,1005 @@
+{
+	"info": {
+		"_postman_id": "9a34554b-3d1d-4a17-a72b-577c60adf45f",
+		"name": "Hotel Hunter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2158276"
+	},
+	"item": [
+		{
+			"name": "Cupid API Get Property",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Hotel IDs",
+							"const hotelIds = [",
+							"    \"1641879\", \"317597\", \"1202743\", \"1037179\", \"1154868\", \"1270324\", \"1305326\", \"1617655\", ",
+							"    \"1975211\", \"2017823\", \"1503950\", \"1033299\", \"378772\", \"1563003\", \"828917\", ",
+							"    \"830417\", \"1702062\", \"1144294\", \"1738870\", \"898052\", \"906450\", \"906467\", ",
+							"    \"2241195\", \"1244595\", \"1277032\", \"956026\", \"957111\", \"152896\", \"896868\", \"982911\", ",
+							"    \"986491\", \"986622\", \"988544\", \"989315\", \"989544\", \"990223\", \"990341\", \"990370\", ",
+							"    \"990490\", \"990609\", \"991819\", \"992027\", \"992851\", \"993851\", ",
+							"    \"994085\", \"994333\", \"994495\", \"994903\", \"995227\", \"995787\", \"996977\", \"1186578\", ",
+							"    \"999444\", \"1000017\", \"1198750\", \"1001100\", \"1001296\", \"1001402\", \"1002200\", ",
+							"    \"1003142\", \"1004288\", \"1006404\", \"1006602\", \"1006810\", \"1006887\", \"1007101\", \"1007269\", ",
+							"    \"1007466\", \"1011203\", \"1011644\", \"1011945\", \"1012047\", \"1012140\", \"1012944\", \"1023527\", ",
+							"    \"1013529\", \"1013584\", \"1014383\", \"1015094\", \"1016591\", \"1016611\", \"1017019\", \"1017039\", ",
+							"    \"1017044\", \"1018030\", \"1018130\", \"1018251\", \"1018402\", \"1018946\", \"1019473\", \"1020332\", ",
+							"    \"1020335\", \"1020386\", \"1021856\", \"1022380\"",
+							"];",
+							"",
+							"// Pick a random Hotel ID from hotelIds",
+							"const randomHotelId = hotelIds[Math.floor(Math.random() * hotelIds.length)];",
+							"",
+							"// Assign variable",
+							"pm.environment.set(\"hotelId\", randomHotelId);",
+							"",
+							"// Log the Hotel ID for debugging",
+							"console.log(\"Hotel ID selected:\", randomHotelId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"hotel\", JSON.stringify(pm.response.json()));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{APIKey}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{cupidUrl}}/{{hotelId}}",
+					"host": [
+						"{{cupidUrl}}"
+					],
+					"path": [
+						"{{hotelId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cupid API Get Translations FR",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"hotelTranslationFR\", JSON.stringify(pm.response.json()));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{APIKey}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{cupidUrl}}/{{hotelId}}/lang/fr",
+					"host": [
+						"{{cupidUrl}}"
+					],
+					"path": [
+						"{{hotelId}}",
+						"lang",
+						"fr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cupid API Get Translations ES",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"hotelTranslationES\", JSON.stringify(pm.response.json()));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{APIKey}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{cupidUrl}}/{{hotelId}}/lang/es",
+					"host": [
+						"{{cupidUrl}}"
+					],
+					"path": [
+						"{{hotelId}}",
+						"lang",
+						"es"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cupid API Get Reviews",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"",
+							"if (Array.isArray(jsonData)) {",
+							"    pm.environment.set(\"reviews\", JSON.stringify(jsonData));",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{APIKey}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{cupidUrl}}/reviews/{{hotelId}}/20",
+					"host": [
+						"{{cupidUrl}}"
+					],
+					"path": [
+						"reviews",
+						"{{hotelId}}",
+						"20"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HH Cupid API Get Property",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/cupid-api/hotels/{{hotelId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cupid-api",
+						"hotels",
+						"{{hotelId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HH Cupid API Get Translations FR",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/cupid-api/hotels/{{hotelId}}/lang/fr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cupid-api",
+						"hotels",
+						"{{hotelId}}",
+						"lang",
+						"fr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HH Cupid API Get Reviews",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"",
+							"if (Array.isArray(jsonData)) {",
+							"    pm.environment.set(\"reviews\", JSON.stringify(jsonData));",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{APIKey}}",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/cupid-api/hotels/reviews/{{hotelId}}/20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cupid-api",
+						"hotels",
+						"reviews",
+						"{{hotelId}}",
+						"20"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addHotel",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{hotel}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/hotels?language=en",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "en"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addHotel Adding Language FR",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{hotelTranslationFR}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/hotels/update?language=fr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"update"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "fr"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addHotel Adding Language ES",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{hotelTranslationES}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/hotels/update?language=es",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"update"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "es"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateHotel",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{hotel}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/hotels/update?language=en",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"update"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "en"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHotel By Id English",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/search/identifier/{{hotelId}}?language=en",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"search",
+						"identifier",
+						"{{hotelId}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "en"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHotel By Id French",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/search/identifier/{{hotelId}}?language=fr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"search",
+						"identifier",
+						"{{hotelId}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "fr"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHotel By Id Spanish",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/search/identifier/{{hotelId}}?language=es",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"search",
+						"identifier",
+						"{{hotelId}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "es"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHotel By Name English",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/search/name/{{hotelName}}?language=en",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"search",
+						"name",
+						"{{hotelName}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "en"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHotel By Name French",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/search/name/{{hotelName}}?language=fr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"search",
+						"name",
+						"{{hotelName}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "fr"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHotel By Name Spanish",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/search/name/{{hotelName}}?language=fr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"search",
+						"name",
+						"{{hotelName}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "fr"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHotel By City English",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/search/location/{{city}}?language=en",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"search",
+						"location",
+						"{{city}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "en"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHotel By City French",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/search/location/{{city}}?language=fr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"search",
+						"location",
+						"{{city}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "fr"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHotel By City Spanish",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/search/location/{{city}}?language=es",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"search",
+						"location",
+						"{{city}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "es"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteHotel By Id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/delete/{{hotelId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"delete",
+						"{{hotelId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addReviews",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{reviews}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/hotels/reviews?hotelId={{hotelId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"reviews"
+					],
+					"query": [
+						{
+							"key": "hotelId",
+							"value": "{{hotelId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getReviews",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/reviews/{{hotelId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"reviews",
+						"{{hotelId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getReviews One Language",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hotels/reviews/{{hotelId}}?language=en",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hotels",
+						"reviews",
+						"{{hotelId}}"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "en"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

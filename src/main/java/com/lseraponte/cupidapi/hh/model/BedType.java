@@ -1,6 +1,7 @@
 package com.lseraponte.cupidapi.hh.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lseraponte.cupidapi.hh.dto.BedTypeDTO;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,7 +44,7 @@ public class BedType {
     private List<BedTypeTranslation> translations;
 
     // Convert from DTO to Entity
-    public static BedType fromDTO(RoomDTO.BedTypeDTO dto, String language) {
+    public static BedType fromDTO(BedTypeDTO dto, String language) {
 
         BedType bedType = BedType.builder()
                 .quantity(dto.quantity())

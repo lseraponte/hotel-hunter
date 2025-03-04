@@ -1,6 +1,7 @@
 package com.lseraponte.cupidapi.hh.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lseraponte.cupidapi.hh.dto.AmenityDTO;
 import com.lseraponte.cupidapi.hh.dto.RoomDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +37,7 @@ public class AmenityTranslation {
     @JsonIgnore
     private String language;
 
-    public static AmenityTranslation fromDTO(RoomDTO.AmenityDTO dto, String language) {
+    public static AmenityTranslation fromDTO(AmenityDTO dto, String language) {
 
         return AmenityTranslation.builder()
                 .name(dto.name())

@@ -14,8 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "reviews")
@@ -45,13 +43,12 @@ public class Review {
     private String name;
 
     @Column(name = "date")
-    private LocalDateTime date;
+    private String date;
 
     @Column(name = "headline")
     private String headline;
 
     @Column(name = "language")
-    @JsonIgnore
     private String language;
 
     @Lob
@@ -69,7 +66,7 @@ public class Review {
                 .country(dto.country())
                 .type(dto.type())
                 .name(dto.name())
-                .date(LocalDateTime.parse(dto.date(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .date(dto.date())
                 .headline(dto.headline())
                 .language(dto.language())
                 .pros(dto.pros())
