@@ -18,8 +18,6 @@ import java.util.Optional;
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Integer> {
 
-    Optional<Hotel> findByHotelId(int hotelId);
-
     @Query("SELECT h.hotelId FROM Hotel h")
     List<Integer> findAllHotelIds();
 

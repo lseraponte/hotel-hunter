@@ -35,10 +35,10 @@ One by one then it calls the Cupid API endpoint to get the hotels in English, Fr
 
 To keep the data updated, there is a cron job in the HotelCronService, so that every hour the data are fetched from Cupid API and the local entities are updated.
 
-### How to use Hotel Hunter
+### How to run Hotel Hunter
 
-Hotel Hunter is a Java application that makes use of Spring Boot.
-The App code brings in a Maven Wrapper, then there is no need to have a MAVEN_HOME set on the machine.
+Hotel Hunter is a Spring Boot Java application.
+The App code brings in a Maven Wrapper, thus there is no need to have a MAVEN_HOME set on the machine.
 To run the application navigate to the root folder of the project from your command line interpreter, then run the following command:
 - For Unix-like machines: ```./mvnw spring-boot:run```
 - For Windows machines: ```mvnw.cmd spring-boot:run```
@@ -47,5 +47,5 @@ The App will run on an embedded Tomcat and is reachable on ```localhost:8080``` 
 
 Attached a Postman collection/environment to send requests to the APIs.
 
-A Swagger endpoint is available to consult APIs specs here: ```localhost:8080/webjars/swagger-ui/index.html```
+A Swagger endpoint is available to consult APIs specs here: ```localhost:8080/webjars/swagger-ui/index.html```.
 

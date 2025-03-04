@@ -1,0 +1,748 @@
+{
+  "hotel_id": 1738870,
+  "cupid_id": 1738870,
+  "main_image_th": "https://static.cupid.travel/hotels/thumbnail/237723896.jpg",
+  "hotel_type": "Hotels",
+  "hotel_type_id": 204,
+  "chain": "Not Available",
+  "chain_id": 0,
+  "latitude": 51.4942,
+  "longitude": -0.1105,
+  "hotel_name": "The Ship Rooms",
+  "phone": "",
+  "fax": "",
+  "email": "",
+  "address":
+  {
+    "address": "171 Kennington Road",
+    "city": "London",
+    "country": "gb"
+  },
+  "stars": 0,
+  "airport_code": "",
+  "rating": 8.5,
+  "review_count": 982,
+  "checkin_start": "15:00",
+  "checkin_end": "23:00",
+  "checkout": "11:00",
+  "parking": null,
+  "group_room_min": null,
+  "child_allowed": null,
+  "pets_allowed": null,
+  "photos":
+  [
+    {
+      "url": "https://static.cupid.travel/hotels/237723896.jpg",
+      "hd_url": "https://static.cupid.travel/hotels/237723896.jpg",
+      "image_description": "",
+      "image_class1": "",
+      "image_class2": "",
+      "main_photo": true,
+      "score": 0,
+      "class_id": 0,
+      "class_order": 0
+    },
+    {
+      "url": "https://static.cupid.travel/hotels/237723906.jpg",
+      "hd_url": "https://static.cupid.travel/hotels/237723906.jpg",
+      "image_description": "",
+      "image_class1": "",
+      "image_class2": "",
+      "main_photo": false,
+      "score": 0,
+      "class_id": 0,
+      "class_order": 0
+    },
+    {
+      "url": "https://static.cupid.travel/hotels/238355566.jpg",
+      "hd_url": "https://static.cupid.travel/hotels/238355566.jpg",
+      "image_description": "",
+      "image_class1": "",
+      "image_class2": "",
+      "main_photo": false,
+      "score": 0,
+      "class_id": 0,
+      "class_order": 0
+    },
+    {
+      "url": "https://static.cupid.travel/hotels/237723902.jpg",
+      "hd_url": "https://static.cupid.travel/hotels/237723902.jpg",
+      "image_description": "",
+      "image_class1": "",
+      "image_class2": "",
+      "main_photo": false,
+      "score": 0,
+      "class_id": 0,
+      "class_order": 0
+    },
+    {
+      "url": "https://static.cupid.travel/hotels/237723917.jpg",
+      "hd_url": "https://static.cupid.travel/hotels/237723917.jpg",
+      "image_description": "",
+      "image_class1": "",
+      "image_class2": "",
+      "main_photo": false,
+      "score": 0,
+      "class_id": 0,
+      "class_order": 0
+    },
+    {
+      "url": "https://static.cupid.travel/hotels/232851650.jpg",
+      "hd_url": "https://static.cupid.travel/hotels/232851650.jpg",
+      "image_description": "",
+      "image_class1": "",
+      "image_class2": "",
+      "main_photo": false,
+      "score": 0,
+      "class_id": 0,
+      "class_order": 0
+    },
+    {
+      "url": "https://static.cupid.travel/hotels/237723911.jpg",
+      "hd_url": "https://static.cupid.travel/hotels/237723911.jpg",
+      "image_description": "",
+      "image_class1": "",
+      "image_class2": "",
+      "main_photo": false,
+      "score": 0,
+      "class_id": 0,
+      "class_order": 0
+    }
+  ],
+  "description": "<p><strong>Central Location</strong></p><p>Located just 1.6 km from Big Ben, The Ship Rooms offers a convenient stay near iconic landmarks like the Houses of Parliament and Westminster Abbey. With easy access to public transport and the city center, exploring London is a breeze for our guests.</p><p><strong>Comfortable Accommodation</strong></p><p>Our rooms are equipped with all the essentials for a comfortable stay, including a desk, flat-screen TV, and private bathroom. Relax in style with our cozy bed linens and fluffy towels, ensuring a restful night after a day of sightseeing.</p><p><strong>Convenient Amenities</strong></p><p>Enjoy hassle-free check-in and check-out with our express service and stay connected with complimentary WiFi throughout the property. Whether you're here for business or leisure, The Ship Rooms has everything you need for a memorable stay in London.</p><p>Book your stay at The Ship Rooms now and experience the perfect blend of convenience and comfort during your London getaway.</p>",
+  "markdown_description": "**Central Location**\n\nLocated just 1.6 km from Big Ben, The Ship Rooms offers a convenient stay near iconic landmarks like the Houses of Parliament and Westminster Abbey. With easy access to public transport and the city center, exploring London is a breeze for our guests.\n\n**Comfortable Accommodation**\n\nOur rooms are equipped with all the essentials for a comfortable stay, including a desk, flat-screen TV, and private bathroom. Relax in style with our cozy bed linens and fluffy towels, ensuring a restful night after a day of sightseeing.\n\n**Convenient Amenities**\n\nEnjoy hassle-free check-in and check-out with our express service and stay connected with complimentary WiFi throughout the property. Whether you're here for business or leisure, The Ship Rooms has everything you need for a memorable stay in London.\n\nBook your stay at The Ship Rooms now and experience the perfect blend of convenience and comfort during your London getaway.",
+  "important_info": "",
+  "facilities":
+  [
+    {
+      "facility_id": 16,
+      "name": "Non-smoking rooms"
+    },
+    {
+      "facility_id": 91,
+      "name": "Luggage storage"
+    },
+    {
+      "facility_id": 49,
+      "name": "Express check-in/check-out"
+    },
+    {
+      "facility_id": 108,
+      "name": "Non-smoking throughout"
+    },
+    {
+      "facility_id": 127,
+      "name": "Private check-in/check-out"
+    },
+    {
+      "facility_id": 425,
+      "name": "Fire extinguishers"
+    },
+    {
+      "facility_id": 422,
+      "name": "Smoke alarms"
+    },
+    {
+      "facility_id": 419,
+      "name": "Key access"
+    },
+    {
+      "facility_id": 424,
+      "name": "CCTV outside property"
+    },
+    {
+      "facility_id": 521,
+      "name": "Television in common areas"
+    },
+    {
+      "facility_id": 568,
+      "name": "Express check-in"
+    },
+    {
+      "facility_id": 584,
+      "name": "Free wired internet"
+    },
+    {
+      "facility_id": 761,
+      "name": "Internet access"
+    },
+    {
+      "facility_id": 859,
+      "name": "Secured parking"
+    }
+  ],
+  "policies":
+  [
+    {
+      "policy_type": "POLICY_HOTEL_INTERNET",
+      "name": "Internet",
+      "description": "WiFi is available in the hotel rooms and is free of charge.\n",
+      "child_allowed": "",
+      "pets_allowed": "",
+      "parking": ""
+    },
+    {
+      "policy_type": "POLICY_HOTEL_PARKING",
+      "name": "Parking",
+      "description": "No parking available.\n",
+      "child_allowed": "",
+      "pets_allowed": "",
+      "parking": ""
+    },
+    {
+      "policy_type": "POLICY_HOTEL_PETS",
+      "name": "Pets",
+      "description": "Pets are not allowed.\n",
+      "child_allowed": "",
+      "pets_allowed": "",
+      "parking": ""
+    },
+    {
+      "policy_type": "POLICY_CHILDREN",
+      "name": "Children and extra bed policy",
+      "description": "Children of any age are allowed.\nChildren up to and including 1 year old stay for free when using an available cot.\nChildren up to and including 11 years old stay for free when using an available extra bed.\nPeople 12 years old and over stay for £20 per person per night when using an available extra bed.\nAny type of extra bed or child's cot/crib is upon request and needs to be confirmed by management.\nSupplements are not calculated automatically in the total costs and will have to be paid for separately during your stay.",
+      "child_allowed": "",
+      "pets_allowed": "",
+      "parking": ""
+    }
+  ],
+  "rooms":
+  [
+    {
+      "id": 4206938,
+      "room_name": "Deluxe Double Room",
+      "description": "This double room features a flat-screen TV, Nespresso machine, electric kettle & a bath.",
+      "room_size_square": 6,
+      "room_size_unit": "m2",
+      "hotel_id": "1738870",
+      "max_adults": 2,
+      "max_children": 1,
+      "max_occupancy": 3,
+      "bed_types":
+      [
+        {
+          "quantity": 1,
+          "bed_type": "Large bed (King size)",
+          "bed_size": "151-180cm wide"
+        }
+      ],
+      "room_amenities":
+      [
+        {
+          "amenities_id": 64,
+          "name": "Coffee/tea maker",
+          "sort": 0
+        },
+        {
+          "amenities_id": 312,
+          "name": "Shower",
+          "sort": 0
+        },
+        {
+          "amenities_id": 339,
+          "name": "TV",
+          "sort": 0
+        },
+        {
+          "amenities_id": 277,
+          "name": "Radio",
+          "sort": 115
+        },
+        {
+          "amenities_id": 82,
+          "name": "Desk",
+          "sort": 0
+        },
+        {
+          "amenities_id": 350,
+          "name": "Toilet",
+          "sort": 10
+        },
+        {
+          "amenities_id": 266,
+          "name": "Private bathroom",
+          "sort": 0
+        },
+        {
+          "amenities_id": 156,
+          "name": "Heating",
+          "sort": 0
+        },
+        {
+          "amenities_id": 371,
+          "name": "View",
+          "sort": 31
+        },
+        {
+          "amenities_id": 96,
+          "name": "Electric kettle",
+          "sort": 0
+        },
+        {
+          "amenities_id": 165,
+          "name": "Hypoallergenic",
+          "sort": 69
+        },
+        {
+          "amenities_id": 63,
+          "name": "Coffee machine",
+          "sort": 46
+        },
+        {
+          "amenities_id": 197,
+          "name": "Linen",
+          "sort": 43
+        },
+        {
+          "amenities_id": 367,
+          "name": "Upper floors accessible by stairs only",
+          "sort": 167
+        },
+        {
+          "amenities_id": 60,
+          "name": "Clothes rack",
+          "sort": 72
+        },
+        {
+          "amenities_id": 352,
+          "name": "Toilet paper",
+          "sort": 0
+        },
+        {
+          "amenities_id": 37,
+          "name": "Bottle of water",
+          "sort": 152
+        },
+        {
+          "amenities_id": 56,
+          "name": "Chocolate or cookies",
+          "sort": 154
+        },
+        {
+          "amenities_id": 361,
+          "name": "Trash cans",
+          "sort": 85
+        },
+        {
+          "amenities_id": 307,
+          "name": "Shampoo",
+          "sort": 0
+        },
+        {
+          "amenities_id": 71,
+          "name": "Conditioner",
+          "sort": 108
+        },
+        {
+          "amenities_id": 35,
+          "name": "Body soap",
+          "sort": 109
+        },
+        {
+          "amenities_id": 327,
+          "name": "Socket near the bed",
+          "sort": 89
+        },
+        {
+          "amenities_id": 108,
+          "name": "Feather pillow",
+          "sort": 91
+        },
+        {
+          "amenities_id": 322,
+          "name": "Smoke alarm",
+          "sort": 182
+        },
+        {
+          "amenities_id": 181,
+          "name": "Key access",
+          "sort": 157
+        },
+        {
+          "amenities_id": 386,
+          "name": "Window",
+          "sort": 14
+        }
+      ],
+      "photos":
+      [
+        {
+          "url": "https://static.cupid.travel/rooms-large-pictures/237723906.jpg",
+          "hd_url": "https://static.cupid.travel/rooms-large-pictures/237723906.jpg",
+          "image_description": "",
+          "image_class1": "",
+          "image_class2": "",
+          "main_photo": false,
+          "score": 0,
+          "class_id": 0,
+          "class_order": 0
+        },
+        {
+          "url": "https://static.cupid.travel/rooms-large-pictures/237723917.jpg",
+          "hd_url": "https://static.cupid.travel/rooms-large-pictures/237723917.jpg",
+          "image_description": "",
+          "image_class1": "",
+          "image_class2": "",
+          "main_photo": false,
+          "score": 0,
+          "class_id": 0,
+          "class_order": 0
+        }
+      ]
+    },
+    {
+      "id": 4206939,
+      "room_name": "Superior Double Room",
+      "description": "Featuring free toiletries, this double room includes a private bathroom with a walk-in shower. This double room has a tea and coffee maker, a carpeted floor, flat-screen TV with streaming services, as well as chocolate for guests. The unit has 1 bed.",
+      "room_size_square": 6,
+      "room_size_unit": "m2",
+      "hotel_id": "1738870",
+      "max_adults": 2,
+      "max_children": 1,
+      "max_occupancy": 3,
+      "bed_types":
+      [
+        {
+          "quantity": 1,
+          "bed_type": "Large bed (King size)",
+          "bed_size": "151-180cm wide"
+        }
+      ],
+      "room_amenities":
+      [
+        {
+          "amenities_id": 64,
+          "name": "Coffee/tea maker",
+          "sort": 0
+        },
+        {
+          "amenities_id": 312,
+          "name": "Shower",
+          "sort": 0
+        },
+        {
+          "amenities_id": 339,
+          "name": "TV",
+          "sort": 0
+        },
+        {
+          "amenities_id": 277,
+          "name": "Radio",
+          "sort": 115
+        },
+        {
+          "amenities_id": 82,
+          "name": "Desk",
+          "sort": 0
+        },
+        {
+          "amenities_id": 350,
+          "name": "Toilet",
+          "sort": 10
+        },
+        {
+          "amenities_id": 266,
+          "name": "Private bathroom",
+          "sort": 0
+        },
+        {
+          "amenities_id": 156,
+          "name": "Heating",
+          "sort": 0
+        },
+        {
+          "amenities_id": 371,
+          "name": "View",
+          "sort": 31
+        },
+        {
+          "amenities_id": 96,
+          "name": "Electric kettle",
+          "sort": 0
+        },
+        {
+          "amenities_id": 165,
+          "name": "Hypoallergenic",
+          "sort": 69
+        },
+        {
+          "amenities_id": 63,
+          "name": "Coffee machine",
+          "sort": 46
+        },
+        {
+          "amenities_id": 197,
+          "name": "Linen",
+          "sort": 43
+        },
+        {
+          "amenities_id": 367,
+          "name": "Upper floors accessible by stairs only",
+          "sort": 167
+        },
+        {
+          "amenities_id": 60,
+          "name": "Clothes rack",
+          "sort": 72
+        },
+        {
+          "amenities_id": 352,
+          "name": "Toilet paper",
+          "sort": 0
+        },
+        {
+          "amenities_id": 37,
+          "name": "Bottle of water",
+          "sort": 152
+        },
+        {
+          "amenities_id": 56,
+          "name": "Chocolate or cookies",
+          "sort": 154
+        },
+        {
+          "amenities_id": 361,
+          "name": "Trash cans",
+          "sort": 85
+        },
+        {
+          "amenities_id": 307,
+          "name": "Shampoo",
+          "sort": 0
+        },
+        {
+          "amenities_id": 71,
+          "name": "Conditioner",
+          "sort": 108
+        },
+        {
+          "amenities_id": 35,
+          "name": "Body soap",
+          "sort": 109
+        },
+        {
+          "amenities_id": 327,
+          "name": "Socket near the bed",
+          "sort": 89
+        },
+        {
+          "amenities_id": 108,
+          "name": "Feather pillow",
+          "sort": 91
+        },
+        {
+          "amenities_id": 322,
+          "name": "Smoke alarm",
+          "sort": 182
+        },
+        {
+          "amenities_id": 181,
+          "name": "Key access",
+          "sort": 157
+        },
+        {
+          "amenities_id": 386,
+          "name": "Window",
+          "sort": 14
+        }
+      ],
+      "photos":
+      [
+        {
+          "url": "https://static.cupid.travel/rooms-large-pictures/237723902.jpg",
+          "hd_url": "https://static.cupid.travel/rooms-large-pictures/237723902.jpg",
+          "image_description": "",
+          "image_class1": "",
+          "image_class2": "",
+          "main_photo": false,
+          "score": 0,
+          "class_id": 0,
+          "class_order": 0
+        },
+        {
+          "url": "https://static.cupid.travel/rooms-large-pictures/237723911.jpg",
+          "hd_url": "https://static.cupid.travel/rooms-large-pictures/237723911.jpg",
+          "image_description": "",
+          "image_class1": "",
+          "image_class2": "",
+          "main_photo": false,
+          "score": 0,
+          "class_id": 0,
+          "class_order": 0
+        }
+      ]
+    },
+    {
+      "id": 4206940,
+      "room_name": "Standard Double Room",
+      "description": "This double room features a flat-screen TV, Nespresso machine and an electric kettle\n\nThis room is directly above the pub entrance and garden and can be noisy up until 11PM on a weekday and 12AM on the weekend.",
+      "room_size_square": 6,
+      "room_size_unit": "m2",
+      "hotel_id": "1738870",
+      "max_adults": 2,
+      "max_children": 1,
+      "max_occupancy": 3,
+      "bed_types":
+      [
+        {
+          "quantity": 1,
+          "bed_type": "Double bed",
+          "bed_size": "131-150 cm wide"
+        }
+      ],
+      "room_amenities":
+      [
+        {
+          "amenities_id": 64,
+          "name": "Coffee/tea maker",
+          "sort": 0
+        },
+        {
+          "amenities_id": 312,
+          "name": "Shower",
+          "sort": 0
+        },
+        {
+          "amenities_id": 339,
+          "name": "TV",
+          "sort": 0
+        },
+        {
+          "amenities_id": 277,
+          "name": "Radio",
+          "sort": 115
+        },
+        {
+          "amenities_id": 82,
+          "name": "Desk",
+          "sort": 0
+        },
+        {
+          "amenities_id": 350,
+          "name": "Toilet",
+          "sort": 10
+        },
+        {
+          "amenities_id": 266,
+          "name": "Private bathroom",
+          "sort": 0
+        },
+        {
+          "amenities_id": 156,
+          "name": "Heating",
+          "sort": 0
+        },
+        {
+          "amenities_id": 371,
+          "name": "View",
+          "sort": 31
+        },
+        {
+          "amenities_id": 96,
+          "name": "Electric kettle",
+          "sort": 0
+        },
+        {
+          "amenities_id": 165,
+          "name": "Hypoallergenic",
+          "sort": 69
+        },
+        {
+          "amenities_id": 63,
+          "name": "Coffee machine",
+          "sort": 46
+        },
+        {
+          "amenities_id": 197,
+          "name": "Linen",
+          "sort": 43
+        },
+        {
+          "amenities_id": 367,
+          "name": "Upper floors accessible by stairs only",
+          "sort": 167
+        },
+        {
+          "amenities_id": 60,
+          "name": "Clothes rack",
+          "sort": 72
+        },
+        {
+          "amenities_id": 352,
+          "name": "Toilet paper",
+          "sort": 0
+        },
+        {
+          "amenities_id": 37,
+          "name": "Bottle of water",
+          "sort": 152
+        },
+        {
+          "amenities_id": 56,
+          "name": "Chocolate or cookies",
+          "sort": 154
+        },
+        {
+          "amenities_id": 361,
+          "name": "Trash cans",
+          "sort": 85
+        },
+        {
+          "amenities_id": 307,
+          "name": "Shampoo",
+          "sort": 0
+        },
+        {
+          "amenities_id": 71,
+          "name": "Conditioner",
+          "sort": 108
+        },
+        {
+          "amenities_id": 35,
+          "name": "Body soap",
+          "sort": 109
+        },
+        {
+          "amenities_id": 327,
+          "name": "Socket near the bed",
+          "sort": 89
+        },
+        {
+          "amenities_id": 108,
+          "name": "Feather pillow",
+          "sort": 91
+        },
+        {
+          "amenities_id": 322,
+          "name": "Smoke alarm",
+          "sort": 182
+        },
+        {
+          "amenities_id": 181,
+          "name": "Key access",
+          "sort": 157
+        },
+        {
+          "amenities_id": 386,
+          "name": "Window",
+          "sort": 14
+        }
+      ],
+      "photos":
+      [
+        {
+          "url": "https://static.cupid.travel/rooms-large-pictures/238355566.jpg",
+          "hd_url": "https://static.cupid.travel/rooms-large-pictures/238355566.jpg",
+          "image_description": "",
+          "image_class1": "",
+          "image_class2": "",
+          "main_photo": false,
+          "score": 0,
+          "class_id": 0,
+          "class_order": 0
+        }
+      ]
+    }
+  ],
+  "reviews": null
+}
