@@ -35,6 +35,8 @@ One by one then it calls the Cupid API endpoint to get the hotels in English, Fr
 
 To keep the data updated, there is a cron job in the HotelCronService, so that every hour the data are fetched from Cupid API and the local entities are updated.
 
+#### The Database schema is included located in src/main/resources/database_schema.png
+
 ### How to run Hotel Hunter
 
 Hotel Hunter is a Spring Boot Java application.
