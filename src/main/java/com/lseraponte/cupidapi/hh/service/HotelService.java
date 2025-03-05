@@ -244,12 +244,11 @@ public class HotelService {
                 .filter(facility -> {
                     Hibernate.initialize(facility.getTranslations());
 
-                    // Filter translations by language
                     List<FacilityTranslation> filteredTranslations = facility.getTranslations().stream()
                             .filter(t -> t.getLanguage().equals(language))
                             .collect(Collectors.toList());
 
-                    facility.setTranslations(filteredTranslations); // Update translations
+                    facility.setTranslations(filteredTranslations);
 
                     return !filteredTranslations.isEmpty();
                 })
@@ -382,7 +381,6 @@ public class HotelService {
                                 return false;
                             }
 
-                            // Sort both lists based on bedTypeName and bedSize
                             currentTranslations.sort(Comparator.comparing(BedTypeTranslation::getBedTypeName)
                                     .thenComparing(BedTypeTranslation::getBedSize));
                             retrievedTranslations.sort(Comparator.comparing(BedTypeTranslation::getBedTypeName)
@@ -422,13 +420,6 @@ public class HotelService {
                     );
                 }
             }
-
-//            List<BedType> existingBedTypeOtherLanguage = retrievedCurrentBedTypes.stream()
-//                    .filter(retrievedBedType -> retrievedBedType.getTranslations().stream()
-//                            .noneMatch(amenityTranslation -> languageCode.equals(amenityTranslation.getLanguage())))
-//                    .collect(Collectors.toList());
-//
-//            updatedBedTypeList.addAll(existingBedTypeOtherLanguage);
         }
         return updatedBedTypeList;
     }
@@ -476,7 +467,6 @@ public class HotelService {
         return updatedFacilityList;
     }
 
-    // The updatePhoto method assume
     private List<Photo> updatePhotos(Object entity, String languageCode) {
 
         List<Photo> photos;

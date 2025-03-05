@@ -23,6 +23,7 @@ public class HotelStartupService {
 
     @PostConstruct
     public void fetchHotelsOnStartup() {
+//        hotel_ids contains all 100 IDs, while partial_hotel_ids a subset of the first 10.
 //        List<Integer> hotelIds = loadHotelIdsFromFile("hotel_ids.txt");
         List<Integer> hotelIds = loadHotelIdsFromFile("partial_hotel_ids.txt");
 

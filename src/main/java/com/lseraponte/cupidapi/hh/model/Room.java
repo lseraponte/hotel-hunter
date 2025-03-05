@@ -73,7 +73,6 @@ public class Room {
     @JoinColumn(name = "room_id")
     private List<RoomTranslation> translations;
 
-    // Convert from DTO to Entity
     public static Room fromDTO(RoomDTO dto, String language) {
         Room room = Room.builder()
                 .id(dto.id())

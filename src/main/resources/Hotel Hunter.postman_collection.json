@@ -30,13 +30,10 @@
 							"    \"1020335\", \"1020386\", \"1021856\", \"1022380\"",
 							"];",
 							"",
-							"// Pick a random Hotel ID from hotelIds",
 							"const randomHotelId = hotelIds[Math.floor(Math.random() * hotelIds.length)];",
 							"",
-							"// Assign variable",
 							"pm.environment.set(\"hotelId\", randomHotelId);",
 							"",
-							"// Log the Hotel ID for debugging",
 							"console.log(\"Hotel ID selected:\", randomHotelId);"
 						],
 						"type": "text/javascript",

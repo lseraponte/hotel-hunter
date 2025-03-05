@@ -56,7 +56,6 @@ public class Photo {
     @Column(name = "class_order")
     private Integer classOrder;
 
-    // Convert from DTO to Entity
     public static Photo fromDTO(PhotoDTO dto) {
         return Photo.builder()
                 .url(dto.url())

@@ -132,7 +132,6 @@ public class Hotel {
     @JoinColumn(name = "hotel_id")
     private List<HotelTranslation> translations;
 
-    // Method to convert from DTO to Entity
     public static Hotel fromDTO(HotelDTO dto, String language) {
         Hotel hotel = Hotel.builder()
                 .hotelId(dto.hotelId())
