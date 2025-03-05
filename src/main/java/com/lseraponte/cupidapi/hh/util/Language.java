@@ -23,6 +23,6 @@ public enum Language {
                 }
             }
         }
-        return ENGLISH; // Default to ENGLISH
+        return ENGLISH;
     }
 }

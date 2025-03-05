@@ -28,7 +28,6 @@ public class Address {
     @Column(name = "country")
     private String country;
 
-    // Method to convert from DTO to Entity
     public static Address fromDTO(AddressDTO dto) {
         return Address.builder()
                 .address(dto.address())

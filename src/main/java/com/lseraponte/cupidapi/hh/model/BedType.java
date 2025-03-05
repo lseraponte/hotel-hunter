@@ -42,7 +42,6 @@ public class BedType {
     @JoinColumn(name = "bed_type_id")
     private List<BedTypeTranslation> translations;
 
-    // Convert from DTO to Entity
     public static BedType fromDTO(BedTypeDTO dto, String language) {
 
         BedType bedType = BedType.builder()

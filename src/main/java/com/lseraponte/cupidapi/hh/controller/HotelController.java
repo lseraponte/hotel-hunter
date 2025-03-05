@@ -77,7 +77,7 @@ public class HotelController {
                                                  @RequestBody(required = false) List<ReviewDTO> reviewDTOList,
                                                  @RequestParam(required = false) String language) {
         Hotel updatedHotel = hotelService.updateHotel(hotelDTO, reviewDTOList, language);
-        return ResponseEntity.ok(updatedHotel); // 200 OK with the updated hotel object
+        return ResponseEntity.ok(updatedHotel);
     }
 
     @Operation(summary = "Delete Hotel", description = "Deletes a hotel by its ID")

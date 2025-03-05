@@ -66,7 +66,7 @@ class AmenityRepositoryTest {
 
     @Test
     void testFindByIdWithTranslationsByLanguageNotFound() {
-        String language = "fr";  // A language that doesn't exist for the test data
+        String language = "fr";
         Optional<Amenity> foundAmenity = amenityRepository.findByIdWithTranslationsByLanguage(1, language);
 
         assertFalse(foundAmenity.isPresent());

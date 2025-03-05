@@ -55,7 +55,6 @@ public class Policy {
     @JsonIgnore
     private String language;
 
-    // Convert from DTO to Entity
     public static Policy fromDTO(PolicyDTO dto, String language) {
 
         return Policy.builder()

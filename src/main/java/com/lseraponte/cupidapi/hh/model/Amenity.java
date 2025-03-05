@@ -36,7 +36,6 @@ public class Amenity {
     @JoinColumn(name = "amenity_id")
     private List<AmenityTranslation> translations;
 
-    // Convert from DTO to Entity
     public static Amenity fromDTO(AmenityDTO dto, String language) {
 
         Amenity amenity = Amenity.builder()

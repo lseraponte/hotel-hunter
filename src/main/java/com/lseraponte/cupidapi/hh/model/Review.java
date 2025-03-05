@@ -59,7 +59,6 @@ public class Review {
     @Column(name = "cons", columnDefinition = "TEXT")
     private String cons;
 
-    // Utility Method to Convert DTO to Entity
     public static Review fromDTO(ReviewDTO dto) {
         return Review.builder()
                 .averageScore(dto.averageScore())

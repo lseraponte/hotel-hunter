@@ -20,7 +20,7 @@ class PhotoRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        // Prepare the test data
+
         photo = Photo.builder()
                 .url("https://example.com/photo.jpg")
                 .hdUrl("https://example.com/photo_hd.jpg")
@@ -33,7 +33,7 @@ class PhotoRepositoryTest {
                 .classOrder(1)
                 .build();
 
-        photoRepository.save(photo);  // Save photo to the database
+        photoRepository.save(photo);
     }
 
     @Test
